@@ -160,22 +160,6 @@ flamescout/
 - Predictions never mean a condition is "safe".
 - Not a substitute for official NASA flammability testing and standards.
 
-## Team
-
-| Name | Role |
-|---|---|
-| `<name>` | Data |
-| `<name>` | Machine learning |
-| `<name>` | Backend |
-| `<name>` | Frontend and design |
-| `<name>` | Presentation and writing |
-
-Mentor: `<name>`
-
-## License
-
-Apache License 2.0. See [`LICENSE`](LICENSE).
-
 ## Acknowledgements
 
 Experiment data and reports are from NASA's public archives (NTRS, OSDR, NASA Glenn Research Center and related resources). Built during the NASA Space Apps Challenge 2026. NASA does not endorse this project.
