@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", Consolas, monospace;
+  --color-ember-50: #fff7ed;
+  --color-ember-100: #ffedd5;
+  --color-ember-500: #f97316;
+  --color-ember-600: #ea580c;
+  --color-accent: #0f766e;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Focus visibility */
+:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}
+
+/* Subtle scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184 / 0.5) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: rgb(148 163 184 / 0.4); border-radius: 8px; }
+
+/* Flame animations — GPU friendly (transform/opacity only) */
+@keyframes freefall-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  25% { transform: translate3d(3px, -6px, 0) scale(1.03, 0.98); }
+  50% { transform: translate3d(-3px, -2px, 0) scale(0.99, 1.03); }
+  75% { transform: translate3d(2px, 4px, 0) scale(1.02, 0.99); }
+}
+@keyframes freefall-morph {
+  0%, 100% { transform: scale(1, 1) rotate(0deg); opacity: 0.95; }
+  33% { transform: scale(1.06, 0.94) rotate(1.2deg); opacity: 1; }
+  66% { transform: scale(0.95, 1.05) rotate(-1.2deg); opacity: 0.9; }
+}
+@keyframes freefall-glow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+@keyframes particle-float {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  20% { opacity: 0.7; }
+  80% { opacity: 0.4; }
+  100% { transform: translate3d(var(--px, 8px), var(--py, -46px), 0); opacity: 0; }
+}
+@keyframes loader-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+@keyframes view-fade {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-freefall-drift { animation: freefall-drift 9s ease-in-out infinite; }
+.animate-freefall-morph { animation: freefall-morph 7s ease-in-out infinite; transform-origin: 50% 55%; }
+.animate-freefall-glow { animation: freefall-glow 5s ease-in-out infinite; }
+.animate-loader-pulse { animation: loader-pulse 1.6s ease-in-out infinite; }
+.animate-view-enter { animation: view-fade 0.25s ease-out; }
+
+/* Flame proximity field — faint orbit that breathes in as the cursor nears */
+.flame-field {
+  position: absolute;
+  inset: -16px;
+  border-radius: 9999px;
+  border: 1px dashed rgb(45 212 191 / 0.35);
+  opacity: var(--field, 0);
+  transition: opacity 0.4s ease;
+  animation: field-spin 26s linear infinite;
+  pointer-events: none;
+}
+@keyframes field-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-freefall-drift,
+  .animate-freefall-morph,
+  .animate-freefall-glow,
+  .animate-loader-pulse,
+  .animate-view-enter,
+  .flame-field {
+    animation: none !important;
+  }
+  * { scroll-behavior: auto !important; }
+}
