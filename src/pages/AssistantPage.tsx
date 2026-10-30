@@ -61,7 +61,7 @@ export default function AssistantPage() {
 
       <div className="mt-3 space-y-4" aria-live="polite">
         {messages.map((m) => (
-          <ChatMessageView key={m.id} message={m} />
+          <ChatMessageView key={m.id} message={m} onFollowUp={send} />
         ))}
         {loading && (
           <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">

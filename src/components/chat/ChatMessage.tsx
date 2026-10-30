@@ -21,7 +21,7 @@ function CitationChip({ n, code, label, onClick }: { n: number; code: string; la
   );
 }
 
-export default function ChatMessageView({ message }: { message: ChatMessage }) {
+export default function ChatMessageView({ message, onFollowUp }: { message: ChatMessage; onFollowUp?: (q: string) => void }) {
   const { setActiveTrace, setEvidenceExperimentIds, setEvidenceOpen } = useApp();
   const [copied, setCopied] = useState(false);
   const [vote, setVote] = useState<"up" | "down" | null>(null);
@@ -121,10 +121,10 @@ export default function ChatMessageView({ message }: { message: ChatMessage }) {
         >
           <Copy size={13} /> {copied ? "Copied" : "Copy"}
         </button>
-        <button onClick={viewSources} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label="View sources">
+        <button onClick={viewSources} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label="View sources" title="Open the source documents in the Evidence workspace">
           <FileSearch size={13} /> View sources
         </button>
-        <button onClick={openTrace} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label="View evidence trace">
+        <button onClick={openTrace} className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label="View evidence trace" title="See every retrieval step that produced this answer">
           <ListChecks size={13} /> Evidence trace
         </button>
         <span className="ml-auto flex items-center gap-1">
@@ -135,11 +135,24 @@ export default function ChatMessageView({ message }: { message: ChatMessage }) {
 
       {message.followUps && message.followUps.length > 0 && (
         <div className="flex flex-wrap gap-1.5 border-t border-slate-100 px-4 py-2.5 sm:px-5 dark:border-slate-800">
-          {message.followUps.map((f) => (
-            <span key={f} className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-[12px] text-slate-500 dark:border-slate-700 dark:text-slate-400">
-              {f} <ArrowRight size={12} aria-hidden />
-            </span>
-          ))}
+          {message.followUps.map((f) => {
+            const inner = <>{f} <ArrowRight size={12} aria-hidden /></>;
+            return onFollowUp ? (
+              <button
+                key={f}
+                onClick={() => onFollowUp(f)}
+                className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-[12px] text-slate-600 transition-colors hover:border-teal-600/50 hover:bg-teal-600/[0.06] hover:text-teal-800 dark:border-slate-700 dark:text-slate-300 dark:hover:text-teal-200"
+                aria-label={`Ask follow-up: ${f}`}
+                title="Run this as a new question"
+              >
+                {inner}
+              </button>
+            ) : (
+              <span key={f} className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-[12px] text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                {inner}
+              </span>
+            );
+          })}
         </div>
       )}
     </article>

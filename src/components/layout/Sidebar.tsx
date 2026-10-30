@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { FlaskConical, GitBranch, LayoutGrid, MessageSquareText, Moon, Plus, Sun, X } from "lucide-react";
+import { FlaskConical, GitBranch, LayoutGrid, MessageSquareText, Moon, Compass, Plus, Sun, X } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { CONVERSATIONS, FILTER_OPTIONS } from "../../data/conversations";
 import { cn } from "../../lib/utils";
@@ -61,7 +61,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { filters, setFilters, clearMessages } = useApp();
+  const { filters, setFilters, clearMessages, setTourOpen } = useApp();
   return (
     <>
       {open && <button className="fixed inset-0 z-30 cursor-default bg-black/30 lg:hidden" onClick={onClose} aria-label="Close navigation" tabIndex={-1} />}
@@ -143,6 +143,13 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
               Filters narrow the mock evidence set. Wording stays within “available evidence”.
             </p>
           </section>
+          <button
+            onClick={() => { setTourOpen(true); onClose(); }}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[12px] font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-teal-800 dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-teal-200"
+            aria-label="Restart the guided tour"
+          >
+            <Compass size={14} aria-hidden /> Take the tour
+          </button>
         </div>
       </aside>
     </>

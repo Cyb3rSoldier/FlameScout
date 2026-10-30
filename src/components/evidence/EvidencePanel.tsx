@@ -32,8 +32,13 @@ export default function EvidencePanel() {
         </div>
         <div className="rounded-xl border border-dashed border-slate-300 px-5 py-8 text-center dark:border-slate-700">
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Evidence will appear here</p>
-          <p className="mx-auto mt-1 max-w-[26ch] text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-            Ask a research question to see supporting experiments, sources, figures and trace.
+          <p className="mx-auto mt-1 max-w-[32ch] text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+            In any answer, click a citation chip like{" "}
+            <span className="mx-0.5 inline-flex translate-y-[1px] items-center gap-1 rounded-md border border-teal-600/25 bg-teal-600/[0.07] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-teal-800 dark:text-teal-200">
+              <span className="flex h-3 w-3 items-center justify-center rounded bg-teal-700 font-mono text-[9px] font-bold text-white dark:bg-teal-600">1</span>
+              SRC-04
+            </span>{" "}
+            — its source opens here.
           </p>
         </div>
         <div>

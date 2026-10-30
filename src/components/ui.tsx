@@ -1,13 +1,21 @@
 import { cn } from "../lib/utils";
 import type { EvidenceStrength } from "../types";
 
-export function Badge({ className, children }: { className?: string; children: React.ReactNode }) {
+export function Badge({ className, children, title }: { className?: string; children: React.ReactNode; title?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium", className)}>
+    <span className={cn("inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium", className)} title={title}>
       {children}
     </span>
   );
 }
+
+/** Plain-language help so the strength label explains itself on hover. */
+const STRENGTH_HELP: Record<string, string> = {
+  Strong: "Multiple consistent demo runs support this.",
+  Moderate: "Some supporting runs, with gaps.",
+  Limited: "Only 1–2 demo runs — describe, don't conclude.",
+  Insufficient: "No adequate evidence found — the honest answer is “not enough data”.",
+};
 
 export function StrengthBadge({ strength }: { strength: EvidenceStrength }) {
   const map: Record<string, string> = {
@@ -17,7 +25,7 @@ export function StrengthBadge({ strength }: { strength: EvidenceStrength }) {
     Insufficient: "border-slate-500/30 bg-slate-500/10 text-slate-600 dark:text-slate-300",
   };
   return (
-    <Badge className={map[strength]}>
+    <Badge className={map[strength]} title={STRENGTH_HELP[strength]}>
       <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
       {strength === "Insufficient" ? "Not enough data" : `${strength} evidence`}
     </Badge>

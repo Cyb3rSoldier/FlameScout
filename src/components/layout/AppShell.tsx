@@ -4,6 +4,7 @@ import { AppProvider, useApp } from "../../context/AppContext";
 import EvidenceTrace from "../evidence/EvidenceTrace";
 import EvidencePanel from "../evidence/EvidencePanel";
 import { Sidebar, TopBar } from "./Sidebar";
+import GuidedTour from "../tour/GuidedTour";
 import { cn } from "../../lib/utils";
 import { X } from "lucide-react";
 
@@ -35,6 +36,7 @@ function ShellInner() {
         </div>
       </div>
       <EvidenceTrace />
+      <GuidedTour />
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function ComparePage() {
       <header>
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">Side-by-side · differences highlighted</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">Compare Experiments</h1>
-        <p className="mt-1 text-[14px] text-slate-500 dark:text-slate-400">Select up to 4 demo experiments. Differences are highlighted; no safety inference is made.</p>
+        <p className="mt-1 text-[14px] text-slate-500 dark:text-slate-400">Click the experiment IDs below to add or remove them — differences highlight automatically. No safety inference is made.</p>
       </header>
 
       <Card className="p-4">

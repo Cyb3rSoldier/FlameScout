@@ -42,7 +42,7 @@ export default function CoveragePage() {
       <header>
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">Differentiator · evidence coverage analysis</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">Knowledge Coverage</h1>
-        <p className="mt-1 max-w-2xl text-[14px] text-slate-500 dark:text-slate-400">Explore which combustion conditions have been studied and where evidence is limited.</p>
+        <p className="mt-1 max-w-2xl text-[14px] text-slate-500 dark:text-slate-400">Explore which combustion conditions have been studied and where evidence is limited. Click any heatmap cell for its experiment details.</p>
       </header>
 
       {error && <Card className="border-red-300 p-4 text-sm text-red-600">{error}</Card>}

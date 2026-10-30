@@ -20,6 +20,8 @@ interface AppState {
   setEvidenceOpen: (v: boolean) => void;
   loading: boolean;
   setLoading: (v: boolean) => void;
+  tourOpen: boolean;
+  setTourOpen: (v: boolean) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -35,6 +37,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -52,8 +55,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       theme, toggleTheme, filters, setFilters, messages, pushMessage, clearMessages,
       activeTrace, setActiveTrace, evidenceExperimentIds, setEvidenceExperimentIds,
       sidebarOpen, setSidebarOpen, evidenceOpen, setEvidenceOpen, loading, setLoading,
+      tourOpen, setTourOpen,
     }),
-    [theme, toggleTheme, filters, messages, pushMessage, clearMessages, activeTrace, evidenceExperimentIds, sidebarOpen, evidenceOpen, loading],
+    [theme, toggleTheme, filters, messages, pushMessage, clearMessages, activeTrace, evidenceExperimentIds, sidebarOpen, evidenceOpen, loading, tourOpen],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

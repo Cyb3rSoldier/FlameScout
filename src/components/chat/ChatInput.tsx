@@ -12,6 +12,15 @@ const MODES: Array<{ id: QueryMode; label: string; icon: typeof MessageCircleQue
   { id: "gap", label: "Gap", icon: Map },
 ];
 
+/** One-line explainer so first-time users know what each mode does. */
+const MODE_HINTS: Record<QueryMode, string> = {
+  ask: "Ask anything — every answer arrives with citations you can open.",
+  compare: "Ask for comparisons — differences pulled straight from the demo table.",
+  figure: "Ask for visuals — retrieved experiment figures with captions.",
+  scenario: "Set the conditions below, then ask what the evidence shows.",
+  gap: "Discover what hasn't been studied — ranked knowledge gaps.",
+};
+
 export function ModeTabs({ mode, setMode }: { mode: QueryMode; setMode: (m: QueryMode) => void }) {
   return (
     <div role="group" aria-label="Research mode">
@@ -22,6 +31,7 @@ export function ModeTabs({ mode, setMode }: { mode: QueryMode; setMode: (m: Quer
             key={m.id}
             aria-pressed={mode === m.id}
             onClick={() => setMode(m.id)}
+            title={MODE_HINTS[m.id]}
             className={cn(
               "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-medium transition-colors sm:px-3",
               mode === m.id
@@ -35,6 +45,7 @@ export function ModeTabs({ mode, setMode }: { mode: QueryMode; setMode: (m: Quer
           </button>
         ))}
       </div>
+      <p className="mt-1.5 text-[11px] text-slate-500 dark:text-slate-400" aria-live="polite">{MODE_HINTS[mode]}</p>
     </div>
   );
 }
