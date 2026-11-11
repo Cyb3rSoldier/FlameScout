@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { AppProvider, useApp } from "../../context/AppContext";
 import { AmbienceProvider, useAmbience } from "../../context/AmbienceContext";
 import FlameAmbience from "../flame/FlameAmbience";
+import LightFlameFx from "../flame/LightFlameFx";
 import EvidenceTrace from "../evidence/EvidenceTrace";
 import EvidencePanel from "../evidence/EvidencePanel";
 import { Sidebar, TopBar } from "./Sidebar";
@@ -23,6 +24,7 @@ function ShellInner() {
       <TopBar onMenu={() => setNavOpen(true)} />
       <div className="relative isolate flex min-h-0 flex-1">
         <FlameAmbience />
+        <LightFlameFx />
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <main className="min-w-0 flex-1 overflow-y-auto" id="main">
           <Outlet />

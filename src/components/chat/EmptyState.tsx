@@ -22,7 +22,7 @@ export default function EmptyStateHero({ onSuggest }: { onSuggest: (q: string) =
           <button
             key={q}
             onClick={() => onSuggest(q)}
-            className="group rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-left transition-colors hover:border-teal-600/50 dark:border-slate-700 dark:bg-slate-900"
+            className="flame-tile group rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-left transition-colors hover:border-teal-600/50 dark:border-slate-700 dark:bg-slate-900"
           >
             <span className="block font-mono text-[10px] uppercase tracking-wider text-slate-400">Research shortcut</span>
             <span className="mt-0.5 block text-[13px] font-medium leading-snug text-slate-700 group-hover:text-teal-800 dark:text-slate-200 dark:group-hover:text-teal-200">

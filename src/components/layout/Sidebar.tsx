@@ -102,9 +102,9 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
                   to={n.to}
                   onClick={onClose}
                   className={({ isActive }) =>
-                    cn("group flex items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 transition-colors",
+                    cn("flame-tile group flex items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 transition-colors",
                       isActive
-                        ? "border-teal-600/20 bg-teal-600/[0.08] dark:border-teal-400/20"
+                        ? "light-nav-active border-teal-600/20 bg-teal-600/[0.08] dark:border-teal-400/20"
                         : "hover:bg-slate-100 dark:hover:bg-slate-800/70")
                   }
                 >

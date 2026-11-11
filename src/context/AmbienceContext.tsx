@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 /**
  * Ambience = the whole UI "burns" at an intensity (0..1).
@@ -10,6 +10,8 @@ interface AmbienceCtx extends AmbienceState {
   enabled: boolean;
   setEnabled: (v: boolean) => void;
   publish: (s: AmbienceState) => void;
+  /** short heat flare (e.g. on click); decays on its own */
+  pulse: () => void;
 }
 
 const IDLE: AmbienceState = { intensity: 0.32, label: "Idle" };
@@ -26,7 +28,18 @@ export function AmbienceProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem(KEY, v ? "on" : "off"); } catch { /* private mode */ }
   }, []);
   const publish = useCallback((s: AmbienceState) => setState(s), []);
-  const value = useMemo(() => ({ ...state, enabled, setEnabled, publish }), [state, enabled, setEnabled, publish]);
+  const [boost, setBoost] = useState(0);
+  const timer = useRef<number>(0);
+  const pulse = useCallback(() => {
+    setBoost(0.28);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setBoost(0), 450);
+  }, []);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const value = useMemo(
+    () => ({ ...state, intensity: Math.min(1, state.intensity + boost), enabled, setEnabled, publish, pulse }),
+    [state, boost, enabled, setEnabled, publish, pulse],
+  );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
