@@ -95,14 +95,257 @@ body {
 @keyframes field-spin {
   to { transform: rotate(360deg); }
 }
+/* Guided-tour arrow — marching dashes toward the highlighted element */
+.tour-arrow {
+  animation: tour-dash 0.9s linear infinite;
+}
+@keyframes tour-dash {
+  to { stroke-dashoffset: -22; }
+}
 @media (prefers-reduced-motion: reduce) {
   .animate-freefall-drift,
   .animate-freefall-morph,
   .animate-freefall-glow,
   .animate-loader-pulse,
   .animate-view-enter,
-  .flame-field {
+  .flame-field,
+  .tour-arrow {
     animation: none !important;
   }
   * { scroll-behavior: auto !important; }
+}
+
+/* ===================================================================
+   Flame layer — blue diffusion shell, flicker, reactive states
+   (transform/opacity only; all motion respects reduced-motion below)
+   =================================================================== */
+:root {
+  --flame-hot: #fbbf24;
+  --flame-mid: #f97316;
+  --flame-glow: 249 115 22;
+}
+
+@keyframes flame-shell-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.75; }
+  50%      { transform: scale(1.09); opacity: 1; }
+}
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1);          opacity: 0.95; }
+  18%      { transform: scale(1.08, 0.94); opacity: 1; }
+  41%      { transform: scale(0.92, 1.06); opacity: 0.82; }
+  67%      { transform: scale(1.05, 0.97); opacity: 1; }
+  84%      { transform: scale(0.97, 1.03); opacity: 0.9; }
+}
+@keyframes flame-bar {
+  0%, 100% { transform: scaleY(1);    opacity: 0.9; }
+  30%      { transform: scaleY(1.18); opacity: 1; }
+  60%      { transform: scaleY(0.86); opacity: 0.75; }
+}
+@keyframes flame-sweep {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}
+
+.animate-flame-shell   { animation: flame-shell-breathe 6.5s ease-in-out infinite; }
+.animate-flame-flicker {
+  animation: flame-flicker var(--fl-speed, 2.3s) ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.flame-fade { transition: opacity 0.6s ease, transform 0.6s ease; }
+
+.flame-shell {
+  background: radial-gradient(circle,
+    transparent 50%,
+    rgb(56 189 248 / 0.38) 68%,
+    rgb(45 212 191 / 0.14) 82%,
+    transparent 100%);
+  filter: blur(2px);
+}
+.flame-spark {
+  background: var(--flame-hot);
+  box-shadow: 0 0 6px 1px rgb(var(--flame-glow) / 0.8);
+  opacity: 0;
+}
+
+/* "No data, no flame" — the flame goes dark and still */
+.flame-wrap[data-untested] { filter: grayscale(1); opacity: 0.35; transition: opacity 0.5s ease; }
+.flame-wrap[data-untested] * { animation-play-state: paused !important; }
+
+/* Panel the reactive flame sits in */
+.flame-stage {
+  background:
+    radial-gradient(ellipse at 12% 50%, rgb(var(--flame-glow) / 0.10), transparent 60%),
+    transparent;
+}
+
+/* Headline: one warm sweep on load */
+.flame-heading {
+  background-image: linear-gradient(100deg,
+    currentColor 0%, currentColor 40%, #f59e0b 50%, currentColor 60%, currentColor 100%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flame-sweep 1.8s ease-out 0.3s 1 forwards;
+}
+
+/* Input ignites on focus; send button warms on hover */
+.flame-input:focus-within {
+  border-color: rgb(var(--flame-glow) / 0.55) !important;
+  box-shadow: 0 0 0 1px rgb(var(--flame-glow) / 0.2), 0 0 26px -6px rgb(var(--flame-glow) / 0.35);
+}
+.flame-send { position: relative; overflow: hidden; }
+.flame-send::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, var(--flame-mid), var(--flame-hot) 45%, transparent 78%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.flame-send > * { position: relative; }
+.flame-send:hover:not(:disabled)::before { opacity: 0.85; }
+.flame-send:hover:not(:disabled) { box-shadow: 0 0 16px rgb(var(--flame-glow) / 0.45); }
+
+/* Sidebar active item: live flame bar */
+.flame-bar {
+  background: linear-gradient(to top, #ea580c, #fbbf24, #fff1c2);
+  box-shadow: 0 0 10px rgb(var(--flame-glow) / 0.7);
+  transform-origin: 50% 100%;
+  animation: flame-bar 1.9s ease-in-out infinite;
+}
+
+/* Citation chips */
+.flame-chip:hover {
+  border-color: rgb(var(--flame-glow) / 0.6) !important;
+  box-shadow: 0 0 14px -2px rgb(var(--flame-glow) / 0.4);
+}
+
+/* Evidence empty state: faint ember glow rising from the bottom */
+.flame-evidence-empty { position: relative; overflow: hidden; }
+.flame-evidence-empty::before {
+  content: "";
+  position: absolute;
+  left: 50%; bottom: -60px;
+  width: 220px; height: 120px; margin-left: -110px;
+  background: radial-gradient(ellipse at 50% 100%, rgb(var(--flame-glow) / 0.16), transparent 70%);
+  animation: freefall-glow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flame-shell,
+  .animate-flame-flicker,
+  .flame-bar,
+  .flame-spark,
+  .flame-evidence-empty::before { animation: none !important; }
+  .flame-spark { display: none; }
+  .flame-heading { animation: none !important; -webkit-text-fill-color: currentColor; background: none; }
+}
+
+/* ===================================================================
+   Flame ambience — the whole UI burns at --amb-i (0 cold … 1 blazing)
+   --amb-i is a registered number, so CSS can transition it smoothly.
+   =================================================================== */
+@property --amb-i { syntax: "<number>"; inherits: true; initial-value: 0.32; }
+
+.flame-root { --amb-i: 0.32; transition: --amb-i 1.8s cubic-bezier(0.22, 0.8, 0.3, 1); }
+
+.flame-amb { opacity: 0.55; }
+.dark .flame-amb { opacity: 1; }
+
+.amb-cold, .amb-warm { position: absolute; inset: -20%; will-change: transform; }
+.amb-cold {
+  opacity: calc(0.95 - var(--amb-i) * 0.8);
+  background:
+    radial-gradient(40% 36% at 20% 25%, rgb(20 184 166 / 0.22), transparent 70%),
+    radial-gradient(36% 40% at 80% 72%, rgb(56 189 248 / 0.16), transparent 70%);
+  animation: amb-drift-a 26s ease-in-out infinite;
+}
+.amb-warm {
+  opacity: calc(var(--amb-i) * 0.95);
+  background:
+    radial-gradient(38% 34% at 76% 28%, rgb(249 115 22 / 0.26), transparent 70%),
+    radial-gradient(34% 38% at 24% 76%, rgb(251 191 36 / 0.16), transparent 70%);
+  animation: amb-drift-b 19s ease-in-out infinite;
+}
+.amb-floor {
+  position: absolute;
+  left: -10%; right: -10%; bottom: -14%;
+  height: calc(18% + var(--amb-i) * 38%);
+  opacity: calc(var(--amb-i) * var(--amb-i));
+  background: radial-gradient(60% 100% at 50% 100%, rgb(249 115 22 / 0.55), rgb(234 88 12 / 0.18) 45%, transparent 75%);
+  transform-origin: 50% 100%;
+  animation: amb-lick 4.2s ease-in-out infinite;
+}
+.amb-ember {
+  position: absolute; bottom: -6px;
+  border-radius: 9999px;
+  background: #fbbf24;
+  box-shadow: 0 0 8px 1px rgb(249 115 22 / 0.8);
+  opacity: 0;
+  animation: amb-ember 12s ease-out infinite;
+}
+
+@keyframes amb-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(5%, -4%, 0) scale(1.08); }
+}
+@keyframes amb-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50%      { transform: translate3d(-6%, 5%, 0) scale(0.96); }
+}
+@keyframes amb-lick {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  30%      { transform: scaleY(1.12) scaleX(0.98); }
+  65%      { transform: scaleY(0.92) scaleX(1.03); }
+}
+@keyframes amb-ember {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  15%  { opacity: calc(var(--amb-i) * 0.85); }
+  85%  { opacity: calc(var(--amb-i) * 0.3); }
+  100% { transform: translate3d(var(--dx, 20px), -85vh, 0); opacity: 0; }
+}
+@keyframes amb-line { to { background-position: -200% 0; } }
+
+/* Top-bar heat line: cold teal → molten orange */
+.flame-heatline {
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgb(45 212 191 / calc(0.85 - var(--amb-i) * 0.65)) 20%,
+    rgb(251 146 60 / calc(0.15 + var(--amb-i) * 0.85)) 50%,
+    rgb(45 212 191 / calc(0.85 - var(--amb-i) * 0.65)) 80%,
+    transparent 100%);
+  background-size: 200% 100%;
+  box-shadow: 0 0 calc(4px + var(--amb-i) * 14px) rgb(249 115 22 / calc(var(--amb-i) * 0.55));
+  animation: amb-line 7s linear infinite;
+}
+.flame-root[data-ambience="off"] .flame-heatline { display: none; }
+
+/* Side panels become frosted glass so the glow reads through them (desktop) */
+@media (min-width: 1024px) {
+  .flame-root:not([data-ambience="off"]) .flame-glass {
+    background-color: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(10px);
+  }
+  .dark .flame-root:not([data-ambience="off"]) .flame-glass,
+  .flame-root:not([data-ambience="off"]).dark .flame-glass {
+    background-color: rgb(2 6 23 / 0.6);
+  }
+}
+
+/* Cards pick up a warm rim as intensity rises */
+.flame-root:not([data-ambience="off"]) .flame-card {
+  border-color: rgb(249 115 22 / calc(0.06 + var(--amb-i) * 0.3));
+  transition: border-color 1.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flame-root { transition: none; }
+  .amb-cold, .amb-warm, .amb-floor, .flame-heatline { animation: none !important; }
+  .amb-ember { display: none; }
 }

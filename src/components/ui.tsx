@@ -11,9 +11,9 @@ export function Badge({ className, children, title }: { className?: string; chil
 
 /** Plain-language help so the strength label explains itself on hover. */
 const STRENGTH_HELP: Record<string, string> = {
-  Strong: "Multiple consistent demo runs support this.",
-  Moderate: "Some supporting runs, with gaps.",
-  Limited: "Only 1–2 demo runs — describe, don't conclude.",
+  Strong: "Multiple consistent published records support this.",
+  Moderate: "Some supporting records, with gaps.",
+  Limited: "Only 1–2 supporting records — describe, don't conclude.",
   Insufficient: "No adequate evidence found — the honest answer is “not enough data”.",
 };
 
@@ -32,9 +32,9 @@ export function StrengthBadge({ strength }: { strength: EvidenceStrength }) {
   );
 }
 
-export function Card({ className, children }: { className?: string; children: React.ReactNode }) {
+export function Card({ className, children, ...rest }: { className?: string; children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:border-slate-800 dark:bg-slate-900", className)}>
+    <div className={cn("flame-card rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:border-slate-800 dark:bg-slate-900", className)} {...rest}>
       {children}
     </div>
   );

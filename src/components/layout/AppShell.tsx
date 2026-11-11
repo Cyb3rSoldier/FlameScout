@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AppProvider, useApp } from "../../context/AppContext";
+import { AmbienceProvider, useAmbience } from "../../context/AmbienceContext";
+import FlameAmbience from "../flame/FlameAmbience";
 import EvidenceTrace from "../evidence/EvidenceTrace";
 import EvidencePanel from "../evidence/EvidencePanel";
 import { Sidebar, TopBar } from "./Sidebar";
@@ -11,16 +13,22 @@ import { X } from "lucide-react";
 function ShellInner() {
   const [navOpen, setNavOpen] = useState(false);
   const { evidenceOpen, setEvidenceOpen } = useApp();
+  const { intensity, enabled } = useAmbience();
   return (
-    <div className="flex h-full flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div
+      className="flame-root flex h-full flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100"
+      style={{ ["--amb-i" as string]: intensity } as React.CSSProperties}
+      data-ambience={enabled ? "on" : "off"}
+    >
       <TopBar onMenu={() => setNavOpen(true)} />
-      <div className="flex min-h-0 flex-1">
+      <div className="relative isolate flex min-h-0 flex-1">
+        <FlameAmbience />
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
         <main className="min-w-0 flex-1 overflow-y-auto" id="main">
           <Outlet />
         </main>
         {/* Right evidence panel: static on xl, drawer otherwise */}
-        <aside className="hidden w-[340px] shrink-0 overflow-y-auto border-l border-slate-200 bg-slate-50/60 xl:block dark:border-slate-800 dark:bg-slate-950" aria-label="Evidence">
+        <aside className="flame-glass hidden w-[340px] shrink-0 overflow-y-auto border-l border-slate-200 bg-slate-50/60 xl:block dark:border-slate-800 dark:bg-slate-950" aria-label="Evidence">
           <EvidencePanel />
         </aside>
       </div>
@@ -44,7 +52,9 @@ function ShellInner() {
 export default function AppShell() {
   return (
     <AppProvider>
-      <ShellInner />
+      <AmbienceProvider>
+        <ShellInner />
+      </AmbienceProvider>
     </AppProvider>
   );
 }

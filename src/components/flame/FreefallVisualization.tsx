@@ -29,7 +29,7 @@ export default function FlameParticles({ count = 7, className }: { count?: numbe
   );
 }
 
-export function FreefallVisualization({ compact = false, magnetic = false }: { compact?: boolean; magnetic?: boolean }) {
+export function FreefallVisualization({ compact = false, magnetic = false, size, particles, sparks = false }: { compact?: boolean; magnetic?: boolean; size?: number; particles?: number; sparks?: boolean }) {
   const areaRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   useMagneticOffset(targetRef, { area: areaRef, maxX: 35, maxY: 25 });
@@ -37,13 +37,13 @@ export function FreefallVisualization({ compact = false, magnetic = false }: { c
     <div ref={magnetic ? areaRef : undefined} className={cn("relative flex flex-col items-center", magnetic && "px-12 py-3")}>
       <div ref={magnetic ? targetRef : undefined} data-flame={magnetic || undefined} className={cn("relative", magnetic && "will-change-transform")}>
         {magnetic && <div aria-hidden className="flame-field" />}
-        <FreefallFlame size={compact ? 64 : 148} />
-        <FlameParticles count={compact ? 0 : 7} />
+        <FreefallFlame size={size ?? (compact ? 64 : 148)} sparks={sparks} />
+        <FlameParticles count={particles ?? (compact ? 0 : 7)} />
       </div>
       {!compact && (
         <div className="mt-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-teal-500" />
-          microgravity · quiescent · demo render
+          microgravity · quiescent · illustrative render
         </div>
       )}
     </div>

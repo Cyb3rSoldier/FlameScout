@@ -15,7 +15,7 @@ const MODES: Array<{ id: QueryMode; label: string; icon: typeof MessageCircleQue
 /** One-line explainer so first-time users know what each mode does. */
 const MODE_HINTS: Record<QueryMode, string> = {
   ask: "Ask anything — every answer arrives with citations you can open.",
-  compare: "Ask for comparisons — differences pulled straight from the demo table.",
+  compare: "Ask for comparisons — differences pulled straight from the catalog table.",
   figure: "Ask for visuals — retrieved experiment figures with captions.",
   scenario: "Set the conditions below, then ask what the evidence shows.",
   gap: "Discover what hasn't been studied — ranked knowledge gaps.",
@@ -69,7 +69,7 @@ export default function ChatInput({
     setText("");
   };
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors focus-within:border-teal-600/60 dark:border-slate-700 dark:bg-slate-900">
+    <div className="flame-input rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-[border-color,box-shadow] focus-within:border-teal-600/60 dark:border-slate-700 dark:bg-slate-900">
       {scenarioExtra}
       {activeFilters.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-100 px-3 pt-2.5 dark:border-slate-800" aria-label="Active filters">
@@ -103,14 +103,14 @@ export default function ChatInput({
           onClick={submit}
           data-magnetic
           disabled={disabled || !text.trim()}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-700 text-white transition-colors hover:bg-teal-600 disabled:opacity-40"
+          className="flame-send flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-700 text-white transition-colors hover:bg-teal-600 disabled:opacity-40"
           aria-label="Send question"
         >
           <ArrowUp size={17} />
         </button>
       </div>
       <p className="border-t border-slate-100 px-3.5 py-1.5 text-[11px] text-slate-400 dark:border-slate-800">
-        Retrieval over mock records, not prediction · avoids safe/unsafe claims · Enter to send
+        Retrieval over the catalog from NASA public sources, not prediction · avoids safe/unsafe claims · Enter to send
       </p>
     </div>
   );

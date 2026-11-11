@@ -12,6 +12,8 @@ export default function ExperimentSummary({ id, citation, onSelect }: { id: stri
     ["Pressure", e.pressure != null ? `${e.pressure} kPa` : "—"],
     ["Gravity", e.gravity],
     ["Airflow", e.airflow],
+    ["Hardware", e.hardware ?? "—"],
+    ["Years", e.years ?? "—"],
     ["Source", src?.title.split("—")[0].trim() ?? e.sourceId],
   ];
   return (
@@ -22,15 +24,14 @@ export default function ExperimentSummary({ id, citation, onSelect }: { id: stri
             {e.id}
             {citation != null && <span className="ml-1.5 rounded bg-teal-700 px-1 py-px font-mono text-[10px] font-bold text-white dark:bg-teal-600">[{citation}]</span>}
             {figs.length > 0 ? (
-              <span className="ml-1.5 rounded border border-teal-600/30 bg-teal-600/10 px-1 py-px font-mono text-[10px] font-semibold text-teal-700 dark:text-teal-300" title={`${figs.length} demo figure${figs.length === 1 ? "" : "s"} available in the evidence workspace`}>
-                FIGURE AVAILABLE{figs.length > 1 ? ` ×${figs.length}` : ""}
+              <span className="ml-1.5 rounded border border-teal-600/30 bg-teal-600/10 px-1 py-px font-mono text-[10px] font-semibold text-teal-700 dark:text-teal-300" title={`${figs.length} illustrative schematic${figs.length === 1 ? "" : "s"} attached in the evidence workspace`}>
+                SCHEMATIC{figs.length > 1 ? ` ×${figs.length}` : ""}
               </span>
             ) : (
-              <span className="ml-1.5 rounded border border-slate-300/60 px-1 py-px font-mono text-[10px] text-slate-400 dark:border-slate-700" title="No demo figure attached to this experiment">
+              <span className="ml-1.5 rounded border border-slate-300/60 px-1 py-px font-mono text-[10px] text-slate-400 dark:border-slate-700" title="No illustrative schematic attached">
                 NO FIGURE
               </span>
             )}
-            <span className="ml-1.5">demo</span>
           </p>
           <h4 className="mt-0.5 truncate text-[13px] font-semibold text-slate-800 dark:text-slate-100" title={e.title}>{e.title}</h4>
         </div>
@@ -45,6 +46,11 @@ export default function ExperimentSummary({ id, citation, onSelect }: { id: stri
         ))}
       </dl>
       {e.outcome && <p className="mt-2 text-[12px] leading-relaxed text-slate-500 dark:text-slate-400">{e.outcome}</p>}
+      {e.objective && (
+        <p className="mt-1 text-[12px] leading-relaxed text-slate-500 dark:text-slate-400">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Objective · </span>{e.objective}
+        </p>
+      )}
       {onSelect && (
         <button onClick={() => onSelect(e.id)} className="mt-2 text-[12px] font-medium text-teal-700 hover:underline dark:text-teal-300">
           View in evidence panel →

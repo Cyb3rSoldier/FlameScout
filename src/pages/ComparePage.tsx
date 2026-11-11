@@ -13,7 +13,7 @@ const ROWS = ["fuel", "oxygen", "pressure", "gravity", "airflow", "outcome"] as 
 export default function ComparePage() {
   const [all, setAll] = useState<Experiment[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string[]>(["EXP-001", "EXP-003", "EXP-005"]);
+  const [selected, setSelected] = useState<string[]>(["BASS", "SAFFIRE-I", "FLEX"]);
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id].slice(0, 4)));
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export default function ComparePage() {
 
   const exps = useMemo(() => (all ?? []).filter((e) => selected.includes(e.id)), [all, selected]);
   const differs = (k: (typeof ROWS)[number]) => new Set(exps.map((e) => String(e[k] ?? ""))).size > 1;
+  const differs2 = (k: "hardware" | "years") => new Set(exps.map((e) => e[k] ?? "")).size > 1;
 
   const chartData = exps.map((e) => ({
     name: e.id,
@@ -34,10 +35,10 @@ export default function ComparePage() {
       <header>
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">Side-by-side · differences highlighted</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight">Compare Experiments</h1>
-        <p className="mt-1 text-[14px] text-slate-500 dark:text-slate-400">Click the experiment IDs below to add or remove them — differences highlight automatically. No safety inference is made.</p>
+        <p className="mt-1 text-[14px] text-slate-500 dark:text-slate-400">Click the investigation IDs below to add or remove them — differences highlight automatically. No safety inference is made.</p>
       </header>
 
-      <Card className="p-4">
+      <Card className="p-4" data-tour="compare-picker">
         <h2 className="text-sm font-semibold">Select experiments ({selected.length}/4)</h2>
         {!all && !loadError && <div className="mt-3"><LoadingSkeleton lines={2} /></div>}
         {loadError && <p className="mt-2 text-[13px] text-red-600 dark:text-red-400" role="alert">{loadError}</p>}
@@ -47,6 +48,7 @@ export default function ComparePage() {
               key={e.id}
               onClick={() => toggle(e.id)}
               aria-pressed={selected.includes(e.id)}
+              title={e.title}
               className={cn("rounded-lg border px-2.5 py-1.5 font-mono text-[12px] transition-colors",
                 selected.includes(e.id) ? "border-teal-700 bg-teal-700 text-white" : "border-slate-200 text-slate-600 hover:border-teal-600/40 dark:border-slate-700 dark:text-slate-300")}
             >
@@ -73,9 +75,15 @@ export default function ComparePage() {
                 </thead>
                 <tbody>
                   <tr className="border-b border-slate-100 dark:border-slate-800">
-                    <td className="sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500">Experiment</td>
+                    <td className="sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500">Investigation</td>
                     {exps.map((e) => <td key={e.id} className="px-4 py-2 font-medium">{e.title}</td>)}
                   </tr>
+                  {exps[0]?.objective && (
+                    <tr className="border-b border-slate-100 dark:border-slate-800">
+                      <td className="sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500">Objective</td>
+                      {exps.map((e) => <td key={e.id} className="px-4 py-2 text-[12px] text-slate-600 dark:text-slate-300">{e.objective ?? "—"}</td>)}
+                    </tr>
+                  )}
                   {ROWS.map((k) => (
                     <tr key={k} className={cn("border-b border-slate-100 dark:border-slate-800", differs(k) && "bg-amber-500/[0.06]")}>
                       <td className={cn("sticky left-0 bg-white px-4 py-2 font-medium capitalize text-slate-400 dark:bg-slate-900 dark:text-slate-500", differs(k) && "bg-amber-50 dark:bg-amber-950/30")}>{k}{differs(k) && <span className="ml-1.5 rounded bg-amber-500/15 px-1 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">differs</span>}</td>
@@ -86,6 +94,14 @@ export default function ComparePage() {
                       ))}
                     </tr>
                   ))}
+                  <tr className="border-b border-slate-100 dark:border-slate-800">
+                    <td className={cn("sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500", differs2("hardware") && "bg-amber-50 dark:bg-amber-950/30")}>Hardware{differs2("hardware") ? "" : " (shared)"}</td>
+                    {exps.map((e) => <td key={e.id} className="px-4 py-2 text-[12px]">{e.hardware ?? "—"}</td>)}
+                  </tr>
+                  <tr className="border-b border-slate-100 dark:border-slate-800">
+                    <td className={cn("sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500", differs2("years") && "bg-amber-50 dark:bg-amber-950/30")}>Years{differs2("years") ? "" : " (shared)"}</td>
+                    {exps.map((e) => <td key={e.id} className="px-4 py-2 font-mono text-[12px]">{e.years ?? "—"}</td>)}
+                  </tr>
                   <tr>
                     <td className="sticky left-0 bg-white px-4 py-2 font-medium text-slate-400 dark:bg-slate-900 dark:text-slate-500">Evidence strength</td>
                     {exps.map((e) => <td key={e.id} className="px-4 py-2">{e.evidenceStrength}</td>)}
@@ -101,8 +117,8 @@ export default function ComparePage() {
 
           <div className="grid gap-3 lg:grid-cols-2">
             <Card className="p-4">
-              <h2 className="text-sm font-semibold">Oxygen vs pressure <span className="font-mono text-[11px] font-normal text-slate-400">(demo values)</span></h2>
-              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">One bar pair per selected experiment — raw condition values, not outcomes.</p>
+              <h2 className="text-sm font-semibold">Oxygen vs pressure <span className="font-mono text-[11px] font-normal text-slate-400">(representative anchors)</span></h2>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">One bar pair per comparison investigation — condition anchors (≈), not outcomes.</p>
               <div className="mt-2 h-56 text-slate-500 dark:text-slate-400" role="img" aria-label="Comparison chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>

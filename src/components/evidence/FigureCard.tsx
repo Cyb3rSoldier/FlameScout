@@ -4,7 +4,7 @@ import { figureById, sourceById } from "../../services/api";
 /** Demo figure placeholder — SVG schematic, never a fabricated NASA image. */
 export function FigureArt({ kind, seed = 1 }: { kind: string; seed?: number }) {
   return (
-    <svg viewBox="0 0 200 120" className="h-full w-full" role="img" aria-label={`Demo ${kind} placeholder figure`}>
+    <svg viewBox="0 0 200 120" className="h-full w-full" role="img" aria-label={`Illustrative ${kind} schematic`}>
       <rect width="200" height="120" fill="currentColor" opacity="0.04" />
       <g opacity="0.85" stroke="currentColor" fill="none" strokeWidth="1.2">
         <rect x="10" y="10" width="180" height="100" rx="6" strokeDasharray="4 4" opacity="0.4" />
@@ -35,7 +35,7 @@ export default function FigureCard({ id }: { id: string }) {
   return (
     <figure className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-center gap-1.5 border-b border-slate-100 px-3 py-2 text-[11px] font-medium text-slate-500 dark:border-slate-800 dark:text-slate-400">
-        <ImageIcon size={13} /> {f.id} · Original figure (demo placeholder)
+        <ImageIcon size={13} /> {f.id} · Illustrative schematic (not a NASA image)
       </div>
       <div className="h-32 text-slate-500 dark:text-slate-400">
         <FigureArt kind={f.kind} seed={f.id.length} />

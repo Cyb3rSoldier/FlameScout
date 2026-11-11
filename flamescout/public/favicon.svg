@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="fs-bg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#0f2e2b"/>
+      <stop offset="100%" stop-color="#071417"/>
+    </radialGradient>
+    <linearGradient id="fs-flame" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="50%" stop-color="#14b8a6"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <radialGradient id="fs-core" cx="50%" cy="60%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#f0fdfa" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#fs-bg)"/>
+  <path d="M32 8 C36 16, 35 20, 39 24 C43 28, 45 33, 43 38 C41 44, 37 48, 32 48 C27 48, 23 44, 21 38 C19.5 33, 21 28, 23.5 24 C22.5 27, 24 28.5, 25.5 28.5 C24.5 23, 26 15, 32 8 Z" fill="url(#fs-flame)"/>
+  <ellipse cx="32" cy="38" rx="5" ry="6" fill="url(#fs-core)"/>
+</svg>

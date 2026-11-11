@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { useFlameIntensity } from "../context/AmbienceContext";
 import { askQuestion } from "../services/api";
 import type { QueryMode } from "../types";
 import FlameLoader from "../components/flame/FlameLoader";
@@ -15,27 +16,24 @@ export default function AssistantPage() {
   const { messages, pushMessage, filters, setEvidenceExperimentIds, loading, setLoading } = useApp();
   const [mode, setMode] = useState<QueryMode>("ask");
   const [scenario, setScenario] = useState(SCENARIO_DEFAULTS);
-  const [showInsufficientDemo, setShowInsufficientDemo] = useState(false);
+  const [showInsufficient, setShowInsufficient] = useState(false);
   const navigate = useNavigate();
 
   const send = async (text: string) => {
     const userMsg = { id: `u-${Date.now()}`, role: "user" as const, text, createdAt: Date.now() };
     pushMessage(userMsg);
     setLoading(true);
-    setShowInsufficientDemo(false);
+    setShowInsufficient(false);
     try {
       const effective = mode === "scenario"
         ? `Scenario: fuel ${scenario.fuel}, ${scenario.oxygen}% O2, ${scenario.pressure} kPa, ${scenario.gravity}, ${scenario.airflow}. ${text}`
         : text;
       const { message } = await askQuestion(effective, mode, filters, messages.length);
-      // Scenario retrieval-not-prediction: surface matching experiments (mock filter)
       pushMessage(message);
       setEvidenceExperimentIds(message.experimentIds ?? []);
-      // Demonstrate insufficient-evidence state when query probes an empty corner
-      if (/13%|35 kpa|mars habitat.*30%/i.test(text)) setShowInsufficientDemo(true);
     } catch {
       pushMessage({
-        id: `e-${Date.now()}`, role: "assistant", text: "", answer: "The demo evidence service failed. Please retry — your question was not answered from evidence.", strength: "Insufficient", citations: [], experimentIds: [], followUps: [], createdAt: Date.now(),
+        id: `e-${Date.now()}`, role: "assistant", text: "", answer: "The retrieval service failed. Please retry — your question was not answered from evidence.", strength: "Insufficient", citations: [], experimentIds: [], followUps: [], createdAt: Date.now(),
       });
     } finally {
       setLoading(false);
@@ -44,6 +42,11 @@ export default function AssistantPage() {
 
   const chatting = messages.length > 0;
   const lastAssistant = [...messages].reverse().find((m) => m.role === "assistant");
+  // The UI burns with the evidence: blazing while retrieving, then settles by evidence strength.
+  const STRENGTH_I = { Strong: 0.78, Moderate: 0.55, Limited: 0.3, Insufficient: 0.06 } as const;
+  const ambI = loading ? 0.95 : lastAssistant?.strength ? STRENGTH_I[lastAssistant.strength] : chatting ? 0.45 : 0.32;
+  const ambLabel = loading ? "Retrieving evidence" : lastAssistant?.strength ? `${lastAssistant.strength} evidence` : "Ready";
+  useFlameIntensity(ambI, ambLabel);
 
   return (
     <div className="animate-view-enter mx-auto flex min-h-full w-full max-w-3xl flex-col px-3 py-4 sm:px-5">
@@ -54,7 +57,7 @@ export default function AssistantPage() {
           <div className="opacity-80 transition-opacity"><FreefallVisualization compact /></div>
           <div className="min-w-0">
             <p className="truncate text-[13px] font-semibold text-slate-700 dark:text-slate-200">Flame in Freefall · evidence session</p>
-            <p className="text-[11px] text-slate-400">{messages.length} messages · demo evidence only</p>
+            <p className="text-[11px] text-slate-400">{messages.length} messages · PSI-cited answers only</p>
           </div>
         </div>
       )}
@@ -68,9 +71,9 @@ export default function AssistantPage() {
             <FlameLoader />
           </div>
         )}
-        {showInsufficientDemo && (
+        {showInsufficient && (
           <InsufficientEvidence
-            available={lastAssistant?.experimentIds?.length ? `${lastAssistant.experimentIds.length} related demo experiments` : undefined}
+            available={lastAssistant?.experimentIds?.length ? `${lastAssistant.experimentIds.length} related investigations` : undefined}
             missing={["O₂ below 15% at this pressure", "Repeated partial-g runs", "Airflow sweep data"]}
             onCoverage={() => navigate("/coverage")}
           />
@@ -87,11 +90,11 @@ export default function AssistantPage() {
               <div className="mb-2 grid grid-cols-2 gap-1.5 rounded-xl bg-slate-50 p-2 sm:grid-cols-5 dark:bg-slate-800/50" aria-label="Scenario conditions">
                 {(
                   [
-                    ["fuel", ["Cellulose", "PMMA", "Polyethylene", "Cotton", "Silicone"]],
-                    ["oxygen", ["16", "18", "21", "30"]],
+                    ["fuel", ["Cotton / PMMA (solid)", "Cotton-fiberglass fabric", "Methanol droplet", "Heptane droplet", "Gaseous"]],
+                    ["oxygen", ["16", "18", "21", "30", "60"]],
                     ["pressure", ["40", "60", "80", "101"]],
-                    ["gravity", ["Microgravity", "Reduced gravity", "Lunar-g", "Mars-g"]],
-                    ["airflow", ["Quiescent", "Opposed 10 cm/s", "Concurrent 15 cm/s", "Co-flow 20 cm/s"]],
+                    ["gravity", ["Microgravity", "Lunar-g", "Mars-g"]],
+                    ["airflow", ["Quiescent", "Low forced flow", "Co-flow duct", "Spherical burner"]],
                   ] as const
                 ).map(([k, opts]) => (
                   <label key={k} className="block">
@@ -106,7 +109,7 @@ export default function AssistantPage() {
                     </select>
                   </label>
                 ))}
-                <p className="col-span-2 text-[11px] text-slate-400 sm:col-span-5">Retrieval only — finds matching demo experiments, makes no safety prediction.</p>
+                <p className="col-span-2 text-[11px] text-slate-400 sm:col-span-5">Retrieval only — surfaces the nearest tested conditions, makes no safety prediction.</p>
               </div>
             ) : undefined
           }

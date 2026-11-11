@@ -6,11 +6,11 @@ export default function EmptyStateHero({ onSuggest }: { onSuggest: (q: string) =
   return (
     <div className="px-2 py-6 sm:py-8">
       <div className="flex flex-col items-center text-center">
-        <FreefallVisualization compact magnetic />
+        <FreefallVisualization compact magnetic size={96} particles={5} sparks />
         <p className="mt-4 font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-teal-700 dark:text-teal-300">
           Microgravity combustion research
         </p>
-        <h1 className="mt-2 max-w-xl text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+        <h1 className="flame-heading mt-2 max-w-xl text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
           Explore the evidence behind flame behavior in microgravity.
         </h1>
         <p className="mt-2 max-w-md text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
@@ -59,7 +59,7 @@ export function InsufficientEvidence({
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
           <div className="rounded-lg bg-slate-100/80 p-3 dark:bg-slate-800/60">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-400">Evidence available</p>
-            <p className="mt-1 text-[13px] font-medium text-slate-700 dark:text-slate-200">{available ?? "Related demo experiments"}</p>
+            <p className="mt-1 text-[13px] font-medium text-slate-700 dark:text-slate-200">{available ?? "Related investigations"}</p>
           </div>
           <div className="rounded-lg bg-slate-100/80 p-3 dark:bg-slate-800/60">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-400">Evidence missing</p>

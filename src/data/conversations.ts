@@ -1,27 +1,27 @@
 import type { Conversation } from "../types";
 
 export const CONVERSATIONS: Conversation[] = [
-  { id: "c1", title: "How does oxygen affect flame behavior?", preview: "Evidence strength: Moderate · 4 experiments", updatedAt: "2m ago" },
-  { id: "c2", title: "Which experiments studied low pressure?", preview: "5 experiments · 2 sources", updatedAt: "1h ago" },
-  { id: "c3", title: "Show reduced gravity experiments", preview: "Limited evidence · 3 runs", updatedAt: "3h ago" },
-  { id: "c4", title: "What conditions have not been tested?", preview: "Knowledge-gap analysis", updatedAt: "Yesterday" },
-  { id: "c5", title: "Compare PMMA vs cellulose spread", preview: "Side-by-side · 4 experiments", updatedAt: "Yesterday" },
-  { id: "c6", title: "Show flame shape at low oxygen", preview: "2 figures retrieved", updatedAt: "2d ago" },
-  { id: "c7", title: "Cotton fabric concurrent flow", preview: "Moderate evidence", updatedAt: "3d ago" },
-  { id: "c8", title: "Partial-g coverage check", preview: "Not enough data", updatedAt: "4d ago" },
+  { id: "c1", title: "What do Saffire results tell us about large-scale fire growth?", preview: "Strong evidence · 3 investigations", updatedAt: "2m ago" },
+  { id: "c2", title: "Which studies tested elevated oxygen like a Moon Base?", preview: "CFI-G line · precondition gap", updatedAt: "1h ago" },
+  { id: "c3", title: "Compare BASS and BASS-II variables", preview: "Same hardware · shared duct · two eras", updatedAt: "3h ago" },
+  { id: "c4", title: "What conditions have not been tested?", preview: "Coverage gaps · Moon-regime on top", updatedAt: "Yesterday" },
+  { id: "c5", title: "How do smoke particle sizes differ by material?", preview: "SAME/SAME-R · detection pillar", updatedAt: "Yesterday" },
+  { id: "c6", title: "Cool flame extinction in methanol droplets", preview: "FLEX Table IX · 280 runs cited", updatedAt: "2d ago" },
+  { id: "c7", title: "What does E-FIELD say about mimicking partial gravity?", preview: "Electric-field analog · physics pillar", updatedAt: "3d ago" },
+  { id: "c8", title: "Mission fit for a pressurized rover", preview: "Ranking view", updatedAt: "4d ago" },
 ];
 
 export const SUGGESTED_QUESTIONS = [
-  "How does oxygen concentration affect flame behavior?",
-  "Which experiments studied low-pressure combustion?",
+  "What do Saffire results tell us about large-scale fire growth?",
+  "Which studies tested elevated oxygen like a Moon Base would use?",
   "What conditions have not been tested?",
-  "Show experiments involving reduced gravity.",
+  "How do smoke particle sizes differ by material?",
 ];
 
 export const FILTER_OPTIONS: Record<string, string[]> = {
-  Fuel: ["All", "Cellulose", "PMMA", "Polyethylene", "Cotton", "Silicone", "Nomex blend", "Ethylene (gas)", "Methane (gas)"],
-  Oxygen: ["All", "<18%", "18–21%", ">21%"],
-  Pressure: ["All", "<60 kPa", "60–90 kPa", "~101 kPa"],
+  Fuel: ["All", "Cotton", "PMMA", "Fabric", "Droplet", "Gaseous", "Smoke/dust"],
+  Oxygen: ["All", "<18%", "18–21%", ">21%", "No-O₂-records"],
+  Pressure: ["All", "<60 kPa", "60–100 kPa", "≈101 kPa"],
   Gravity: ["All", "Microgravity", "Reduced gravity", "Lunar-g", "Mars-g", "Normal gravity"],
-  Airflow: ["All", "Quiescent", "Opposed", "Concurrent", "Co-flow", "Low flow"],
+  Airflow: ["All", "Quiescent", "Opposed", "Concurrent", "Co-flow", "Low flow", "Spherical burner"],
 };

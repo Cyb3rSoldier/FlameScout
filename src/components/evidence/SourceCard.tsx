@@ -27,7 +27,7 @@ export default function SourceCard({ sourceId, citation, compact = false }: { so
       </div>
       {!compact && (
         <p className="mt-2 border-t border-slate-100 pt-2 font-mono text-[10px] leading-relaxed text-slate-400 dark:border-slate-800">
-          Demo source — placeholder, not a NASA identifier · cited as [{citation ?? "–"}] in the answer
+          PSI record — public NASA data pointer · cited as [{citation ?? "–"}] in the answer
         </p>
       )}
     </article>

@@ -1,5 +1,7 @@
 import { FlaskConical } from "lucide-react";
 import { useApp } from "../../context/AppContext";
+import { EXPERIMENTS } from "../../data/experiments";
+import { SOURCES } from "../../data/sources";
 import { experimentById, sourceById } from "../../services/api";
 import { OXYGEN_CHART } from "../../data/coverage";
 import EvidenceChart from "./EvidenceChart";
@@ -30,13 +32,13 @@ export default function EvidencePanel() {
           <h2 className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">Evidence</h2>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Supporting research for your current query</p>
         </div>
-        <div className="rounded-xl border border-dashed border-slate-300 px-5 py-8 text-center dark:border-slate-700">
+        <div className="flame-evidence-empty rounded-xl border border-dashed border-slate-300 px-5 py-8 text-center dark:border-slate-700">
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Evidence will appear here</p>
           <p className="mx-auto mt-1 max-w-[32ch] text-xs leading-relaxed text-slate-500 dark:text-slate-400">
             In any answer, click a citation chip like{" "}
             <span className="mx-0.5 inline-flex translate-y-[1px] items-center gap-1 rounded-md border border-teal-600/25 bg-teal-600/[0.07] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-teal-800 dark:text-teal-200">
               <span className="flex h-3 w-3 items-center justify-center rounded bg-teal-700 font-mono text-[9px] font-bold text-white dark:bg-teal-600">1</span>
-              SRC-04
+              SRC-FLEX
             </span>{" "}
             — its source opens here.
           </p>
@@ -49,7 +51,7 @@ export default function EvidencePanel() {
                 <li key={r.band} className="flex justify-between"><span>O₂ {r.band}</span><span className="font-mono">{r.experiments} runs</span></li>
               ))}
             </ul>
-            <p className="mt-2 border-t border-slate-100 pt-2 font-mono text-[10px] text-slate-400 dark:border-slate-800">14 demo experiments · 8 demo sources · mock only</p>
+            <p className="mt-2 border-t border-slate-100 pt-2 font-mono text-[10px] text-slate-400 dark:border-slate-800">{EXPERIMENTS.length} PSI investigations · {SOURCES.length} source records · illustrative figures marked</p>
           </Card>
         </div>
       </div>

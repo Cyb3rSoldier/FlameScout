@@ -5,7 +5,7 @@ const PHASES = [
   {
     name: "Collect",
     steps: [
-      { t: "Sources", d: "Reports, datasets and figure sets — demo placeholders in this build." },
+      { t: "Sources", d: "PSI experiment records, NASA technical reports, datasets and figure references — summarized in this in-browser build; the backend re-queries PSI directly." },
       { t: "Parse", d: "Text → chunks · tables → rows · figures → image + caption + context." },
       { t: "Normalize", d: "One schema: id, source, page, fuel, O₂, pressure, gravity, airflow, outcome. Missing values flagged, never guessed." },
     ],
@@ -45,7 +45,7 @@ export default function MethodologyPage() {
         <p className="mt-1 max-w-2xl text-[14px] text-slate-500 dark:text-slate-400">How FlameScout turns scattered combustion records into cited, verifiable answers — and says “not enough data” when evidence is thin.</p>
       </header>
 
-      <Card className="p-4 sm:p-5">
+      <Card className="p-4 sm:p-5" data-tour="pipeline">
         <h2 className="text-sm font-semibold">Evidence pipeline <span className="font-mono text-[11px] font-normal text-slate-400">source → normalize → index → retrieve → verify → cite</span></h2>
         <div className="mt-4 space-y-5">
           {PHASES.map((phase, pi) => (
@@ -80,7 +80,7 @@ export default function MethodologyPage() {
         <h2 className="text-sm font-semibold">How to read an evidence trace <span className="font-mono text-[11px] font-normal text-slate-400">“View evidence trace” on any answer</span></h2>
         <p className="mt-1 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
           Every answer carries a step-by-step receipt: the original question, how the router classified it,
-          which demo experiments were retrieved, the exact claims checked against sources, and the final
+          which experiments were retrieved, the exact claims checked against sources, and the final
           evidence-strength label. If the trace shows thin retrieval, the answer says “not enough data”
           instead of guessing.
         </p>
@@ -106,7 +106,7 @@ export default function MethodologyPage() {
           <li>Use “supported by available evidence”, “limited evidence”, “not enough data”, “not covered”.</li>
           <li>Never claim a condition is safe/unsafe or that “NASA proved X”.</li>
           <li>Scenario mode retrieves matching experiments — it does not predict outcomes.</li>
-          <li>Demo sources are placeholders; wire to FastAPI + verified corpora before any real use.</li>
+          <li>Figures in this build are illustrative schematics, clearly labelled — wire to FastAPI + verified PSI corpora before any operational use.</li>
         </ul>
       </Card>
     </div>

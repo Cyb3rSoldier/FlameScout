@@ -1,30 +1,41 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { FlaskConical, GitBranch, LayoutGrid, MessageSquareText, Moon, Compass, Plus, Sun, X } from "lucide-react";
+import { Beaker, FlaskConical, Globe, GitBranch, HelpCircle, LayoutGrid, MessageSquareText, Moon, Compass, Plus, ShieldCheck, SlidersHorizontal, Sun, Target, X } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { CONVERSATIONS, FILTER_OPTIONS } from "../../data/conversations";
 import { cn } from "../../lib/utils";
 import FreefallFlame from "../flame/FreefallFlame";
+import HeatMeter from "../flame/HeatMeter";
 
 const NAV = [
   { to: "/assistant", label: "Evidence Assistant", hint: "Ask · cite · verify", icon: MessageSquareText },
+  { to: "/rank", label: "Mission Fit", hint: "Ranked for crewed environments", icon: Target },
   { to: "/coverage", label: "Coverage Map", hint: "Studied vs untested", icon: LayoutGrid },
   { to: "/compare", label: "Experiment Compare", hint: "Side-by-side", icon: GitBranch },
+  { to: "/predict", label: "Prediction", hint: "Exploratory · FLEX only", icon: SlidersHorizontal },
   { to: "/methodology", label: "Methodology", hint: "Pipeline · trace", icon: FlaskConical },
+  { to: "/earth", label: "Earth Applications", hint: "NASA spin-offs · transfer", icon: Globe },
+  { to: "/lab", label: "Experiment Lab", hint: "What-if · element sliders", icon: Beaker },
+  { to: "/controls", label: "Safety Controls", hint: "Pillar-view research", icon: ShieldCheck },
 ];
 
 const PAGE_CONTEXT: Record<string, { title: string; sub: string }> = {
   "/assistant": { title: "Evidence Assistant", sub: "Ask · retrieve · cite" },
+  "/rank": { title: "Mission Fit", sub: "Ranked for crewed environments" },
   "/coverage": { title: "Coverage Map", sub: "Studied vs untested" },
   "/compare": { title: "Experiment Compare", sub: "Side-by-side analysis" },
+  "/predict": { title: "Prediction", sub: "Exploratory · real FLEX tests" },
   "/methodology": { title: "Methodology", sub: "Pipeline · evidence trace" },
+  "/earth": { title: "Earth Applications", sub: "NASA spin-offs · transfer" },
+  "/lab": { title: "Experiment Lab", sub: "What-if · element sliders" },
+  "/controls": { title: "Safety Controls", sub: "Pillar-view research" },
 };
 
 export function TopBar({ onMenu }: { onMenu: () => void }) {
-  const { theme, toggleTheme, evidenceOpen, setEvidenceOpen } = useApp();
+  const { theme, toggleTheme, evidenceOpen, setEvidenceOpen, setTourOpen } = useApp();
   const { pathname } = useLocation();
   const ctx = PAGE_CONTEXT[pathname] ?? PAGE_CONTEXT["/assistant"];
   return (
-    <header className="flex h-[52px] shrink-0 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 dark:border-slate-800 dark:bg-slate-950">
+    <header className="relative flex h-[52px] shrink-0 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 dark:border-slate-800 dark:bg-slate-950">
       <div className="flex min-w-0 items-center gap-2">
         <button className="rounded-md p-2 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800" onClick={onMenu} aria-label="Open navigation">
           <LayoutGrid size={18} />
@@ -40,16 +51,21 @@ export function TopBar({ onMenu }: { onMenu: () => void }) {
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
-        <span className="mr-1 hidden items-center gap-1.5 font-mono text-[10px] text-slate-400 lg:inline-flex" title="Frontend runs on mock data; a backend developer will connect real APIs later">
-          <span className="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-600" aria-hidden /> mock data
+        <HeatMeter />
+        <span className="mr-1 hidden items-center gap-1.5 font-mono text-[10px] text-slate-400 lg:inline-flex" title="Catalog summarizes public NASA PSI documents; representative values flagged (≈) — a backend can connect live PSI APIs later">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden /> NASA public sources
         </span>
         <button onClick={() => setEvidenceOpen(!evidenceOpen)} className="rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium hover:border-teal-600/40 xl:hidden dark:border-slate-700" aria-label="Toggle evidence panel" aria-pressed={evidenceOpen}>
           Evidence
+        </button>
+        <button onClick={() => setTourOpen(true)} className="rounded-md p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label="Open feature tutorial" title="Feature tour">
+          <HelpCircle size={17} />
         </button>
         <button onClick={toggleTheme} className="rounded-md p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
           {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
         </button>
       </div>
+      <div aria-hidden className="flame-heatline" />
     </header>
   );
 }
@@ -67,7 +83,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
       {open && <button className="fixed inset-0 z-30 cursor-default bg-black/30 lg:hidden" onClick={onClose} aria-label="Close navigation" tabIndex={-1} />}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-72 shrink-0 flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-auto lg:translate-x-0 lg:visible dark:border-slate-800 dark:bg-slate-950",
+          "flame-glass fixed inset-y-0 left-0 z-40 flex w-72 shrink-0 flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-auto lg:translate-x-0 lg:visible dark:border-slate-800 dark:bg-slate-950",
           open ? "visible translate-x-0" : "invisible -translate-x-full",
         )}
         aria-label="Research workspace sidebar"
@@ -99,7 +115,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
                         <span className={cn("block truncate text-[13px] font-medium", isActive ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-slate-300")}>{n.label}</span>
                         <span className="block truncate font-mono text-[10px] text-slate-400">{n.hint}</span>
                       </span>
-                      {isActive && <span className="ml-auto h-5 w-0.5 shrink-0 rounded-full bg-teal-600 dark:bg-teal-400" aria-hidden />}
+                      {isActive && <span className="flame-bar ml-auto h-5 w-[3px] shrink-0 rounded-full" aria-hidden />}
                     </>
                   )}
                 </NavLink>
@@ -140,7 +156,7 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
               ))}
             </div>
             <p className="mt-3 rounded-lg bg-slate-100 px-2.5 py-2 text-[11px] leading-relaxed text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
-              Filters narrow the mock evidence set. Wording stays within “available evidence”.
+              Filters narrow the retrieved PSI catalog. Wording stays within “available evidence” and marks representative values with ≈.
             </p>
           </section>
           <button

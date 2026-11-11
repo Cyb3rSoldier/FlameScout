@@ -11,7 +11,7 @@ function CitationChip({ n, code, label, onClick }: { n: number; code: string; la
     <button
       onClick={onClick}
       data-citation
-      className="inline-flex items-center gap-1.5 rounded-md border border-teal-600/25 bg-teal-600/[0.07] px-2 py-1 font-mono text-[11px] font-semibold text-teal-800 transition-colors hover:border-teal-600/50 hover:bg-teal-600/[0.14] dark:text-teal-200"
+      className="flame-chip inline-flex items-center gap-1.5 rounded-md border border-teal-600/25 bg-teal-600/[0.07] px-2 py-1 font-mono text-[11px] font-semibold text-teal-800 transition-colors hover:border-teal-600/50 hover:bg-teal-600/[0.14] dark:text-teal-200"
       title={label}
       aria-label={`Citation ${n}, ${code}: ${label}. Open in evidence workspace.`}
     >
@@ -51,7 +51,7 @@ export default function ChatMessageView({ message, onFollowUp }: { message: Chat
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-4 py-2.5 sm:px-5 dark:border-slate-800">
         <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">Answer</h3>
         {message.strength && <StrengthBadge strength={message.strength} />}
-        <span className="ml-auto font-mono text-[10px] text-slate-400">demo · {message.mode}</span>
+        <span className="ml-auto font-mono text-[10px] text-slate-400">psi-derived · {message.mode}</span>
       </div>
 
       <div className="px-4 py-3.5 sm:px-5">

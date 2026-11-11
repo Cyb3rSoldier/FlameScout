@@ -25,7 +25,7 @@ export default function CoveragePage() {
   const [fuelFilter, setFuelFilter] = useState("All");
 
   useEffect(() => {
-    getCoverage().then((r) => { setCells(r.cells); setGaps(r.gaps); }).catch(() => setError("Coverage service failed (demo). Retry."));
+    getCoverage().then((r) => { setCells(r.cells); setGaps(r.gaps); }).catch(() => setError("Coverage service failed. Retry."));
   }, []);
 
   const filtered = useMemo(() => {
@@ -51,13 +51,13 @@ export default function CoveragePage() {
 
       {cells && (
         <>
-          <Card className="p-4">
+          <Card className="p-4" data-tour="coverage-heatmap">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-sm font-semibold">Pressure × Oxygen heatmap <span className="font-mono text-[11px] font-normal text-slate-400">(demo)</span></h2>
+              <h2 className="text-sm font-semibold">Pressure × Oxygen heatmap <span className="font-mono text-[11px] font-normal text-slate-400">(derived from the catalog)</span></h2>
               <label className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                 Fuel
                 <select value={fuelFilter} onChange={(e) => setFuelFilter(e.target.value)} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-900" aria-label="Coverage fuel filter">
-                  {["All", "Cellulose", "PMMA", "Polyethylene", "Cotton"].map((f) => <option key={f}>{f}</option>)}
+                  {["All", "Cotton / PMMA (solid)", "Mixed material samples (solid)", "Cotton-fiberglass fabric (solid)", "Droplets", "Gaseous", "Smoke/dust"].map((f) => <option key={f}>{f}</option>)}
                 </select>
               </label>
             </div>
@@ -117,7 +117,7 @@ export default function CoveragePage() {
                 </div>
                 <div className="space-y-2">
                   {selected.experimentIds.map((id) => <ExperimentSummary key={id} id={id} />)}
-                  {selected.experimentIds.length === 0 && <p className="text-[13px] text-slate-400">No demo experiments in this cell — evidence gap.</p>}
+                  {selected.experimentIds.length === 0 && <p className="text-[13px] text-slate-400">No investigation in this cell — evidence gap.</p>}
                 </div>
               </div>
             </Card>
@@ -128,9 +128,9 @@ export default function CoveragePage() {
             <Card className="p-4">
               <h2 className="text-sm font-semibold">How to read this map</h2>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-[13px] text-slate-500 dark:text-slate-400">
-                <li>Rows = pressure bands, columns = oxygen bands (demo binning).</li>
-                <li>“Limited” means 1–2 demo runs — describe, don’t conclude.</li>
-                <li>“Not covered” means zero runs — a gap, not a prediction.</li>
+                <li>Rows = pressure bands, columns = oxygen bands (representative anchors, ≈). Smoke/dust records have no O₂ anchor and are excluded from the grid — they don't describe a combustible atmosphere.</li>
+                <li>“Limited” means one investigation in that cell — describe, don’t conclude.</li>
+                <li>“Not covered” means zero investigations — a gap, not a prediction.</li>
               </ul>
             </Card>
           </div>
@@ -140,7 +140,7 @@ export default function CoveragePage() {
               <TriangleAlert size={16} className="text-amber-600" />
               <h2 className="text-base font-bold">Priority Knowledge Gaps</h2>
             </div>
-            <p className="mt-0.5 text-[13px] text-slate-500 dark:text-slate-400">Ranked by coverage sparsity in the demo set — evidence analysis, not prediction.</p>
+            <p className="mt-0.5 text-[13px] text-slate-500 dark:text-slate-400">Ranked by coverage sparsity in the Artemis-era fire-safety lens — evidence analysis, not prediction.</p>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               {gaps?.map((g, i) => (
                 <Card key={g.id} className="border-l-4 border-l-orange-400/80 p-4 dark:border-l-orange-500/70">
@@ -165,8 +165,8 @@ export default function CoveragePage() {
           <Card className="p-4">
             <h2 className="text-sm font-semibold">Related sources</h2>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
-              <SourceCard sourceId="SRC-02" citation={2} compact />
-              <SourceCard sourceId="SRC-07" citation={7} compact />
+              <SourceCard sourceId="SRC-SAFFIRE" citation={2} compact />
+              <SourceCard sourceId="SRC-SAME" citation={6} compact />
             </div>
           </Card>
         </>

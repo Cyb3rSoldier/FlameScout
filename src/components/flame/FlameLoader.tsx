@@ -13,10 +13,10 @@ export default function FlameLoader({ step }: { step?: number }) {
   const label = STEPS[step ?? i];
   return (
     <div className="flex items-center gap-4" role="status" aria-live="polite" aria-label={label}>
-      <FreefallFlame size={52} />
+      <FreefallFlame size={52} o2={26} sparks />
       <div>
         <p className="animate-loader-pulse text-sm font-medium text-slate-700 dark:text-slate-200">{label}</p>
-        <p className="text-xs text-slate-500 dark:text-slate-400">Searching demo evidence index…</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Ranking the PSI evidence index…</p>
       </div>
     </div>
   );
