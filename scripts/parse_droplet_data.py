@@ -71,7 +71,7 @@ MAX_GLITCH_MM = 0.05   # reject windows containing a tracking glitch: a single
                        # upward step in measured diameter larger than this
 
 
-def steady_burn(df: pd.DataFrame) -> dict:
+def steady_burn(df: pd.DataFrame, burn_time_s: float | None = None) -> dict:
     burn = df[df["t"] > IGNITION_S]
     full = fit_window(df, burn["t"].min(), df["t"].max())
     t_min, t_max = df["t"].min(), df["t"].max()
@@ -79,21 +79,44 @@ def steady_burn(df: pd.DataFrame) -> dict:
         slope, r2 = full if full else (float("nan"), float("nan"))
         return {"K": -slope, "r2": r2, "win_t0": t_min, "win_t1": t_max,
                 "full_K": -slope, "n_win": len(df)}
-    best = None
-    t0 = IGNITION_S                      # never include the ignition transient
-    while t0 + WINDOW_S <= t_max:
+    # cap the end of the search at the official burn duration: after flame
+    # extinction the droplet keeps vaporizing with a different slope, which
+    # is not the quasi-steady burning rate NASA reports
+    t_end = min(t_max, IGNITION_S + burn_time_s) if burn_time_s else t_max
+    cands = []                       # (t0, t1, slope, r2)
+    t0 = IGNITION_S
+    while t0 + WINDOW_S <= t_end:
         w = df[(df["t"] >= t0) & (df["t"] <= t0 + WINDOW_S)]
         glitch = (w["d"].diff().clip(lower=0).max() or 0)
         res = fit_window(df, t0, t0 + WINDOW_S)
         if res and res[0] < 0 and glitch <= MAX_GLITCH_MM:
-            score = -res[0] * max(res[1], 0)   # fastest AND most linear
-            if best is None or score > best[0]:
-                best = (score, t0, t0 + WINDOW_S, res)
+            cands.append((t0, t0 + WINDOW_S, res[0], res[1]))
         t0 += WINDOW_S / 4
-    if best is None:
+    if not cands:
         return {"K": float("nan"), "r2": float("nan"), "win_t0": "", "win_t1": "",
                 "full_K": -full[0], "n_win": 0}
-    _, wt0, wt1, (slope, r2) = best
+    # plateau detection: the quasi-steady period is the longest run of
+    # consecutive windows whose slopes agree (within tolerance); the ignition
+    # transient is short and steep, so a long plateau beats it
+    tol = 0.20
+    runs: list[list[int]] = []
+    cur: list[int] = []
+    for i, c in enumerate(cands):
+        if cur:
+            run_slopes = [cands[j][2] for j in cur]
+            med = sorted(run_slopes)[len(run_slopes) // 2]
+            if abs(c[2] - med) <= abs(med) * tol:
+                cur.append(i)
+                runs.append(cur[:])
+                continue
+            cur = []
+        cur = [i]
+    if not runs:
+        runs = [[i] for i in range(len(cands))]
+    best_run = max(runs, key=lambda r: (len(r), -sorted(cands[j][2] for j in r)[len(r) // 2]))
+    idx = best_run[len(best_run) // 2]
+    target = cands[idx]
+    wt0, wt1, slope, r2 = target
     w = df[(df["t"] >= wt0) & (df["t"] <= wt1)]
     return {"K": -slope, "r2": r2, "win_t0": wt0, "win_t1": wt1,
             "full_K": -full[0], "n_win": len(w)}
@@ -103,8 +126,8 @@ def main() -> None:
     input_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(DEFAULT_INPUT)
     out_csv = Path(sys.argv[2]) if len(sys.argv) > 2 else DEFAULT_OUTPUT
 
-    official = pd.read_csv(out_csv.parent / "flex_table_ix.csv")[["id", "burningRateMm2s"]]
-    official.columns = ["id", "officialRate"]
+    official = pd.read_csv(out_csv.parent / "flex_table_ix.csv")[["id", "burningRateMm2s", "burnTimeS"]]
+    official.columns = ["id", "officialRate", "officialBurnTime"]
 
     rows = []
     for path in sorted(input_dir.glob("*DropletData*.txt")):
@@ -116,7 +139,8 @@ def main() -> None:
         if df is None:
             print(f"skip (unparseable): {path.name}")
             continue
-        sb = steady_burn(df)
+        bt = official.loc[official["id"] == m.group(0).upper(), "officialBurnTime"]
+        sb = steady_burn(df, float(bt.iloc[0]) if len(bt) and pd.notna(bt.iloc[0]) else None)
         rows.append({
             "id": m.group(0).upper(),
             "file": path.name,

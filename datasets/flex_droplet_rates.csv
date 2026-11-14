@@ -1,5 +1,6 @@
-id,file,n_points,t_min_s,t_max_s,d_max_mm,d_min_mm,window_t0_s,window_t1_s,n_window_points,derivedK_mm2_s,window_r2,naiveFullSlope_mm2_s,officialRate,pct_diff_vs_official
-FLEX-002,FLEX-002_DropletData.txt,660,-1.5,21.7,2.2205,0.7851,1.75,2.75,29,0.6362,0.9957,0.0764,0.6,6.0
-FLEX-007,FLEX-007_DropletData.txt,141,-1.467,3.9,1.8808,0.9592,2.75,3.75,29,0.8418,0.9845,0.1753,0.67,25.6
-FLEX-010,FLEX-010_DropletData.txt,229,-1.9,5.967,4.0037,3.3787,2.25,3.25,29,0.9689,0.8817,0.2642,0.37,161.9
-FLEX-011,FLEX-011_DropletData.txt,151,-1.7,3.5,3.3435,1.2785,2.5,3.5,30,0.6031,0.7869,0.4195,0.4,50.8
+id,file,n_points,t_min_s,t_max_s,d_max_mm,d_min_mm,window_t0_s,window_t1_s,n_window_points,derivedK_mm2_s,window_r2,naiveFullSlope_mm2_s,officialRate,officialBurnTime,pct_diff_vs_official
+FLEX-002,FLEX-002_DropletData.txt,660,-1.5,21.7,2.2205,0.7851,1.75,2.75,29,0.6362,0.9957,0.0764,0.6,5.0,6.0
+FLEX-006,FLEX-006_DropletData.txt,595,-1.9,18.6,3.0501,0.5429,7.25,8.25,29,0.4166,0.9945,0.1867,0.51,9.6,18.3
+FLEX-007,FLEX-007_DropletData.txt,141,-1.467,3.9,1.8808,0.9592,2.25,3.25,29,0.7066,0.9875,0.1753,0.67,5.3,5.5
+FLEX-010,FLEX-010_DropletData.txt,229,-1.9,5.967,4.0037,3.3787,4.25,5.25,29,0.3614,0.9813,0.2642,0.37,13.6,2.3
+FLEX-011,FLEX-011_DropletData.txt,151,-1.7,3.5,3.3435,1.2785,1.5,2.5,30,0.373,0.9684,0.4195,0.4,16.5,6.8
