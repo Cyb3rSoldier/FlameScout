@@ -1,0 +1,2 @@
+id,file,n_points,t_min_s,t_max_s,d_max_mm,d_min_mm,window_t0_s,window_t1_s,n_window_points,derivedK_mm2_s,window_r2,naiveFullSlope_mm2_s,officialRate,pct_diff_vs_official
+FLEX-007,FLEX-007_DropletData.txt,141,-1.467,3.9,1.8808,0.9592,2.75,3.75,29,0.8418,0.9845,0.1753,0.67,25.6
