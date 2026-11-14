@@ -1,0 +1,18 @@
+chamber,test,day_test_num,hot_flame_num,outcome,variant,variant_of,ox_ignition_slpm,n2_ignition_slpm,ox_test1_slpm,n2_test1_slpm,valve_safety_timer_s,ox_bottle_psia,notes
+filled: ~9% n-butane,21256A1,1,1,sustained ignition,,,0.295,0.0,0.295,0.0,942.0,66.0,
+filled: ~9% n-butane,21256A2,2,2,sustained ignition,flow,A1,0.197,,0.197,,875.0,64.0,
+filled: ~9% n-butane,21256A3,3,3,sustained ignition,flow,A1-A2,0.098,,0.098,,815.0,63.0,
+filled: ~9% n-butane,21256A4,4,4,sustained ignition,flow,A1-A3,0.074,,0.074,,765.0,63.0,
+filled: ~9% n-butane,21256A5,5,5,sustained ignition,flow,A1-A4,0.492,,0.492,,703.0,59.0,
+filled: ~9% n-butane,21256B1,8,8,sustained ignition,TFP,A1,0.295,0.0,0.295,0.0,477.0,48.0,
+filled: ~9% n-butane,21256C1,6,6,sustained ignition,dilution,A1,0.295,0.203,0.295,0.203,636.0,56.0,
+filled: ~9% n-butane,21256C2,9,,sustained ignition,dilution,C1,0.098,0.068,0.098,0.068,422.0,48.0,
+filled: ~9% n-butane,21256F1,7,7,sustained ignition,dilution,A1+C1,0.295,0.882,0.295,0.882,543.0,52.0,
+diluted: ~7% n-butane,21256H1,10,10,sustained ignition,,A1,0.295,0.0,0.295,0.0,371.0,46.0,
+diluted: ~7% n-butane,21256H2,11,,sustained ignition,diluted-atmosphere,H1,0.197,0.0,0.197,0.0,323.0,45.0,
+diluted: ~7% n-butane,21256H3,12,12,sustained ignition,diluted-atmosphere,H1-H2,0.098,0.0,0.098,0.0,278.0,44.0,
+diluted: ~7% n-butane,21256H4,13,,unsustained ignition,diluted-atmosphere,H1-H3,0.074,0.0,0.074,0.0,237.0,44.0,
+diluted: ~7% n-butane,21256H5,14,,sustained ignition,diluted-atmosphere,H1-H4,0.492,0.0,0.492,0.0,184.0,41.0,
+diluted: ~7% n-butane,21256J1,17,,unsustained ignition,diluted-atmosphere,H1,0.295,0.0,0.295,0.0,40.0,36.0,run almost as planned (stabilizationTime2Sec=1)
+diluted: ~7% n-butane,21256K1,15,,unsustained ignition,,C1,0.295,0.203,0.295,0.203,134.0,39.0,
+diluted: ~7% n-butane,21256M1,16,,unsustained ignition,,F1,0.295,0.882,0.295,0.882,89.0,38.0,console flow-trace data not saved
