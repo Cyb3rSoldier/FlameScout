@@ -1,5 +1,27 @@
+import { Link } from "react-router-dom";
 import { ArrowDown, Database, FileSearch, ListChecks, MessagesSquare, SearchCheck } from "lucide-react";
 import { Card } from "../components/ui";
+
+const CHALLENGE_MAP = [
+  {
+    req: "Identify investigations most relevant to the fire safety needs of habitable crew environments.",
+    where: "Mission Fit (/rank)",
+    href: "/rank",
+    how: "Ranks the 21-investigation PSI catalog against a chosen crewed environment (ISS, lunar habitat, Mars) with per-criterion evidence scores.",
+  },
+  {
+    req: "Extract data that supports predictive modeling of flammability and fire scenarios in space exploration.",
+    where: "Predict (/predict) + Experiment Lab (/lab)",
+    href: "/predict",
+    how: "276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) power kNN predictions inside the tested envelope — and the model refuses with “not enough data” outside it.",
+  },
+  {
+    req: "Highlight research that informs the development of next-generation fire safety controls and equipment.",
+    where: "Safety Controls (/controls) + Earth Applications (/earth)",
+    href: "/controls",
+    how: "Published findings grouped into prevention, detection, suppression and combustion-physics pillars — plus five technology transfers to Earth fire safety.",
+  },
+];
 
 const PHASES = [
   {
@@ -44,6 +66,27 @@ export default function MethodologyPage() {
         <h1 className="mt-1 text-2xl font-bold tracking-tight">Methodology</h1>
         <p className="mt-1 max-w-2xl text-[14px] text-slate-500 dark:text-slate-400">How FlameScout turns scattered combustion records into cited, verifiable answers — and says “not enough data” when evidence is thin.</p>
       </header>
+
+      <Card className="p-4 sm:p-5" data-tour="challenge-map">
+        <h2 className="text-sm font-semibold">Challenge requirements → where FlameScout delivers</h2>
+        <p className="mt-1 text-[12px] text-slate-500 dark:text-slate-400">
+          The “Flame in Freefall” challenge asks for an AI-powered dashboard that summarizes, ranks, and interprets combustion investigation results. Each stated requirement maps to a working page:
+        </p>
+        <ol className="mt-3 space-y-2.5">
+          {CHALLENGE_MAP.map((c, i) => (
+            <li key={c.where} className="flex gap-3">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-teal-600/10 font-mono text-[11px] font-bold text-teal-700 dark:text-teal-300">{i + 1}</span>
+              <div>
+                <p className="text-[13px] leading-snug text-slate-600 dark:text-slate-300">“{c.req}”</p>
+                <p className="mt-0.5 text-[13px]">
+                  <Link to={c.href} className="font-semibold text-teal-700 underline decoration-dotted underline-offset-2 hover:underline dark:text-teal-300">{c.where}</Link>
+                  <span className="text-slate-500 dark:text-slate-400"> — {c.how}</span>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Card>
 
       <Card className="p-4 sm:p-5" data-tour="pipeline">
         <h2 className="text-sm font-semibold">Evidence pipeline <span className="font-mono text-[11px] font-normal text-slate-400">source → normalize → index → retrieve → verify → cite</span></h2>
