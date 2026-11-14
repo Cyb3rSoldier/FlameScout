@@ -1,9 +1,9 @@
 # FLEX TestSheet cross-validation (all PSI-69 sheets)
 
-- TestSheet files parsed: 488 (txt + rtf variants), **240 unique tests**
-- Tests present in Table IX: 240 (0 sheet-only records or not charted)
-- **All 9 fields exact: 152/240 (63%)**
-- At least 8 of 9 fields exact: 215/240 (90%)
+- TestSheet files parsed: 547 (txt + rtf variants), **270 unique tests**
+- Tests present in Table IX: 270 (0 sheet-only records or not charted)
+- **All 9 fields exact: 170/270 (63%)**
+- At least 8 of 9 fields exact: 244/270 (90%)
 - Sheets explicitly mentioning cool flames: 53
 
 Sheets carry the crew-recorded ambient environment, fuel, D0,
@@ -48,11 +48,23 @@ Table IX of NASA/TP-2015-216046 within 2% or 0.01 absolute.
 | FLEX-053 | 6/9 | - |
 | FLEX-054 | 8/9 | - |
 | FLEX-057 | 8/9 | yes |
+| FLEX-058 | 8/9 | - |
+| FLEX-060 | 8/9 | - |
 | FLEX-063 | 8/9 | - |
+| FLEX-065 | 8/9 | - |
+| FLEX-071 | 8/9 | - |
 | FLEX-072 | 8/9 | - |
 | FLEX-074 | 8/9 | - |
 | FLEX-080 | 6/9 | yes |
 | FLEX-081 | 6/9 | - |
+| FLEX-083 | 6/9 | - |
+| FLEX-085 | 8/9 | - |
+| FLEX-086 | 8/9 | - |
+| FLEX-087 | 8/9 | - |
+| FLEX-088 | 8/9 | - |
+| FLEX-089 | 8/9 | - |
+| FLEX-090 | 8/9 | - |
+| FLEX-091 | 8/9 | - |
 | FLEX-092 | 8/9 | - |
 | FLEX-096 | 6/9 | - |
 | FLEX-102 | 8/9 | yes |
