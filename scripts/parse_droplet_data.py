@@ -94,7 +94,7 @@ def steady_burn(df: pd.DataFrame, burn_time_s: float | None = None) -> dict:
         t0 += WINDOW_S / 4
     if not cands:
         return {"K": float("nan"), "r2": float("nan"), "win_t0": "", "win_t1": "",
-                "full_K": -full[0], "n_win": 0}
+                "full_K": (-full[0] if full else float("nan")), "n_win": 0}
     # plateau detection: the quasi-steady period is the longest run of
     # consecutive windows whose slopes agree (within tolerance); the ignition
     # transient is short and steep, so a long plateau beats it
@@ -140,7 +140,11 @@ def main() -> None:
             print(f"skip (unparseable): {path.name}")
             continue
         bt = official.loc[official["id"] == m.group(0).upper(), "officialBurnTime"]
-        sb = steady_burn(df, float(bt.iloc[0]) if len(bt) and pd.notna(bt.iloc[0]) else None)
+        try:
+            sb = steady_burn(df, float(bt.iloc[0]) if len(bt) and pd.notna(bt.iloc[0]) else None)
+        except Exception as e:
+            print(f"skip (steady_burn {type(e).__name__}): {path.name}")
+            continue
         rows.append({
             "id": m.group(0).upper(),
             "file": path.name,
