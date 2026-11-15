@@ -4,7 +4,7 @@
 # (vocabulary, IDF weights, sklearn's English stop-word list) plus the chunk
 # texts. The browser recomputes TF-IDF vectors with the identical math
 # (sublinear_tf, ngram 1-2, l2 norm) in src/lib/ragSearch.ts — same corpus,
-# same scores, same 0.10 refusal threshold. Still deterministic, still
+# same scores, same 0.11 refusal threshold. Still deterministic, still
 # no LLM anywhere in the data path.
 #
 # Output: src/data/ragIndex.json

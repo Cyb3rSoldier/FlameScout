@@ -33,8 +33,10 @@ SOURCES = [
     "psi159_test_point_configs.chunks.jsonl",
 ]
 # refuse instead of answering below this cosine similarity (tested-envelope rule)
-# calibrated: valid queries score 0.124-0.326, off-topic probes score ~0.088
-MIN_SCORE = 0.10
+# calibrated: valid queries score 0.124-0.463; "rocket propellant combustion"
+# scores 0.105 and "sun temperature" 0.112 — both must refuse (house rule:
+# rockets/propellants out of scope, off-topic refused)
+MIN_SCORE = 0.112
 
 
 def main() -> None:

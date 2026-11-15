@@ -247,7 +247,7 @@ function buildRagAnswer(question: string): AnswerParts & { hits: RagHit[] } {
     strength,
     findings,
     limitations:
-      "Retrieval-only summary: sentences are quoted from indexed PSI-derived chunks, not paraphrased. No safe/unsafe claim is drawn; representative values are flagged (≈) at the source. Refusal threshold for weak matches: 0.10.",
+      "Retrieval-only summary: sentences are quoted from indexed PSI-derived chunks, not paraphrased. No safe/unsafe claim is drawn; representative values are flagged (≈) at the source. Refusal threshold for weak matches: 0.11 (calibrated against off-topic probes).",
     followUps: FOLLOWUP_BANK.ask,
     figureIds: [...new Set(figures)].slice(0, 3),
     hits: rag.hits,

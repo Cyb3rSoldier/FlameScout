@@ -4,7 +4,7 @@
  * Mirrors scripts/build_rag_index.py + scripts/rag_retrieve.py exactly:
  *   TfidfVectorizer(sublinear_tf=True, ngram_range=(1,2), stop_words="english")
  *   → tf' = 1 + ln(tf) · idf (smooth), L2-normalized rows, cosine similarity,
- *   refusal when best score < minScore (0.10, calibrated: valid queries
+ *   refusal when best score < minScore (0.11, calibrated: valid queries
  *   0.124+, off-topic ≈0.088).
  *
  * The model state (vocabulary, IDF, stop-words, chunk texts) lives in

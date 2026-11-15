@@ -7,6 +7,6 @@
   "psi159_test_point_configs.chunks.jsonl"
  ],
  "features": 18707,
- "min_score_refusal": 0.1,
+ "min_score_refusal": 0.112,
  "note": "deterministic TF-IDF retrieval; no LLM in the data path"
 }
