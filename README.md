@@ -2,6 +2,10 @@ FlameScout — Flame in Freefall (NASA Space Apps 2026)
 
 Live demo: https://shaninx48.github.io/FlameScout/
 
+Demo video (240 s): https://www.youtube.com/watch?v=8db2P04rIfI
+
+Pitch video (30 s): https://www.youtube.com/watch?v=nvMl6VpEzuc
+
 FlameScout is a web dashboard that turns NASA's microgravity combustion research into cited, checkable fire-safety evidence for crewed missions (Artemis-era: spacecraft, Moon base, pressurized rover, spacesuit), and shows where evidence is missing.
 
 Team MindStormers, Dhaka: Omar Faruk Rakib (lead, full-stack), MD Tanveer Mahmood Shanin (full-stack), Sawda Akter (frontend, researcher), Joydev Datta (UI/UX), Antara Mazumder (backend), Md Junaeid Ali (AI engineer). Local mentor: SK Tajbir.
@@ -16,6 +20,17 @@ Data sources
 Investigation catalog: summaries of NASA PSI records and NASA technical reports (src/data/experiments.ts). Representative values are flagged (≈).
 Run-level data: FLEX Table IX, NASA/TP-2015-216046 (NTRS 20150023456), 276 tests (157 methanol, 119 heptane), in src/data/flexTests.ts. Pressure 70 to 309 kPa, O2 12 to 34 mol%.
 SAME (PSI-101) TEM soot particle sizes (datasets/): image-derived approximations from automated blob detection, not lab measurements.
+FLEX droplet time series (PSI-69): all 276 tests parsed. 259 are comparable with Table IX; median difference in burning rate is about 3.9%, and 180 of 259 (70%) are within 7%. See datasets/flex_validation_report.md.
+FLEX test sheets: 505+ files, 240 unique tests; 63% match all 9 fields exactly, 90% match at least 8 of 9; 53 tests record a cool flame.
+FLEX gas mixtures: chamber gas (O2, CO2, N2, He, Xe) for 28 test points.
+FLEX-2 (PSI-68): 749 test points, 124 gas mixtures (including SF6, He and CO2 suppressant gases), 871 crew/downlink note blocks, chamber and radiometer summaries. Droplet diameter images (.zip archives) were not processed.
+CFI-G (PSI-159): test point configurations and 17 labelled runs from day 9 (13 sustained, 4 unsustained).
+Flame Design (PSI-10): SRD Table 1.1 (4 flames) and Table 1.2 (17 sooting-limit flames).
+PSI catalog and RAG: 21 investigations; 338 retrieval chunks.
+Catalog summaries only (no run-level data): SPICE, DAFT, BRE, CLD Flame, BASS-II.
+
+All data processing is deterministic Python/pandas; no LLM is in the data path. Image-derived and catalog values are approximations (≈).
+
 Key finding
 
 None of the 276 FLEX tests combine 30% O2 or more with 70.5 kPa or less, the atmosphere expected in Moon bases (challenge text: 30% O2 or more, 10.2 psi or less). NASA also notes that PSI holds no partial-gravity combustion data yet. This claim is scoped to FLEX and to this catalog, not to all of NASA's data.
@@ -45,7 +60,7 @@ Routes
 Highlights
 Mission Fit (/rank): transparent heuristic ranking (atmosphere overlap 0.35 · safety pillar 0.30 · materials directness 0.20 · evidence depth 0.15) of investigations per crewed environment. Planned records are listed as roadmap lines, unranked.
 Coverage Map (/coverage): pressure × oxygen heatmap derived from the catalog, with ranked knowledge gaps (top gap: Moon-regime solid flammability at 30% O2 or more and 10.2 psi or less).
-Evidence Assistant (/assistant): a retrieval assistant using field-weighted keyword search (title ×3, keywords ×2, body ×1) over the catalog, with filters, five query modes, citations, evidence traces and honest "insufficient evidence" answers. It is not vector search or an LLM.
+Evidence Assistant (/assistant): a retrieval assistant. A deterministic TF-IDF index (scikit-learn, 338 chunks) built from the catalog, FLEX report, PSI records and documents is queried in the browser (src/lib/ragSearch.ts, score-identical to the Python reference scripts/rag_retrieve.py). Answers come only from retrieved chunks, each citation links to its NASA source, and queries scoring below the refusal threshold (0.112) get a clear "not enough data" answer with no citations. No LLM is used in the answer path.
 Prediction (/predict): exploratory distance-weighted nearest-neighbour estimator (k=6) over the 276 real FLEX tests. 5-fold cross-validation grouped by test date: R² 0.67 for extinction diameter (error 0.45 mm), 0.58 for burn time (3.6 s), 0.63 for burning rate (0.057 mm²/s). It refuses to extrapolate outside the tested envelope, and it does not predict extinction (the outcome label is weak, 67% Extinction).
 Living flame UI: the flame illustration and the interface react to the conditions you set and to how strong the evidence is.
 Flame visuals
@@ -80,4 +95,4 @@ Notes
 Figures in the UI are clearly labelled illustrative schematics, never claimed NASA imagery.
 Copy avoids safe/unsafe claims; scenario mode is retrieval-only.
 Flame visuals are schematic echoes of your settings, not predictions or simulations.
-AI tools used in building this project: Claude and ChatGPT.
+AI tools used in building this project: Claude, ChatGPT, OpenCode (GLM). Keep this list identical to the submission form's AI-use section.
