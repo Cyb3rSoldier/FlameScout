@@ -1,5 +1,11 @@
 # YouTube Description Templates — FlameScout Videos
 
+> **Final links (2026-11-15):**
+> - 240s pitch (YouTube): https://www.youtube.com/watch?v=nvMl6VpEzuc
+> - 30s global judging (hosted externally): https://youtu.be/8db2P04rIfI
+> - 240s Drive folder link: pending
+> - NASA project page: pending
+
 Paste-ready text for both uploads. Fill every `[SLOT]`, delete brackets you don't use. Keep the credit lines — crediting third-party assets, templates, or generated content is a Space Apps rule, not decoration.
 
 ---
@@ -7,13 +13,13 @@ Paste-ready text for both uploads. Fill every `[SLOT]`, delete brackets you don'
 ## 📹 Video 2 — 240-second pitch (YouTube + Drive folder)
 
 **Title suggestion:**
-`FlameScout — Fire Safety for the Artemis Era | NASA Space Apps 2026 | [SLOT: event city]`
+`FlameScout — Fire Safety for the Artemis Era | NASA Space Apps 2026 | Dhaka`
 
 **Description:**
 
 ---
 
-FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences Informatics (PSI) into clear, cited answers for spacecraft fire safety — and says "not enough data" when the evidence is thin. Built by **Team Mindstormers** at NASA Space Apps 2026, **[SLOT: event city]**.
+FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences Informatics (PSI) into clear, cited answers for spacecraft fire safety — and says "not enough data" when the evidence is thin. Built by **Team Mindstormers** at NASA Space Apps 2026, **Dhaka, Bangladesh**.
 
 **What you'll see** — jump to a section:
 - 0:00 The flame in freefall — why space fire behaves differently
@@ -48,15 +54,15 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 
 ---
 
-FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **[SLOT: event city]**, by **Team Mindstormers**.
+FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **Dhaka, Bangladesh**, by **Team Mindstormers**.
 
 **NASA data on screen:** NASA Physical Sciences Informatics (PSI) · FLEX Table IX, NASA/TP-2015-216046
-**Full pitch (4 minutes, with demo):** [SLOT: link to the 240-second video]
+**Full pitch (4 minutes, with demo):** https://www.youtube.com/watch?v=nvMl6VpEzuc
 **Project page:** [SLOT: NASA site project link]
 
 **Credits:** [SLOT: music/assets/generated content — same credit block as the 240s video]
 
-*English subtitles are burned in. This link is public and requires no login. [SLOT: delete if untrue — it must be true]*
+*English subtitles are burned in. This link is public and requires no login.* (30s video: https://youtu.be/8db2P04rIfI)
 
 ---
 
