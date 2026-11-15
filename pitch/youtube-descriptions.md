@@ -39,7 +39,7 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 
 **Credits:** Voiceover: MD Tanveer Mahmood Shanin (Team Mindstormers) · Music: royalty-free track from the CapCut built-in audio library · Video editing: CapCut (Joydev Datta, Team Mindstormers)
 
-**NASA Space Apps** is a public international innovation program — learn more at spaceappschallenge.org. *(SLOT: add your Local Lead's preferred event line if any)*
+**NASA Space Apps** is a public international innovation program — learn more at spaceappschallenge.org. *Dhaka event · Local Lead: S K Tajbid.*
 
 *#SpaceApps #NASASpaceApps2026 #TeamMindstormers #FlameScout*
 
