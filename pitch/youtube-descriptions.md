@@ -37,7 +37,7 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 **Team:** Omar Faruk Rakib (Team Lead & Full-Stack Developer) · MD Tanveer Mahmood Shanin (Full-Stack Developer) · Sawda Akter (Frontend Developer & Researcher) · Joydev Datta (UI/UX & Editor) · Antara Mazumder (Backend Developer) · Md Junaeid Ali (AI Engineer)
 **Challenge:** Flame in Freefall
 
-**Credits:** [SLOT: music — title/artist/license] · [SLOT: template or stock assets] · [SLOT: AI-generated content — describe what was generated] · [SLOT: anything else third-party]
+**Credits:** Voiceover: MD Tanveer Mahmood Shanin (Team Mindstormers) · Music: [SLOT: track name/artist/source — pending from editor] · [SLOT: template/stock/AI-generated assets — pending]
 
 **NASA Space Apps** is a public international innovation program — learn more at spaceappschallenge.org. *(SLOT: add your Local Lead's preferred event line if any)*
 
@@ -60,7 +60,7 @@ FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for cr
 **Full pitch (4 minutes, with demo):** https://www.youtube.com/watch?v=nvMl6VpEzuc
 **Project page:** [SLOT: NASA site project link]
 
-**Credits:** [SLOT: music/assets/generated content — same credit block as the 240s video]
+**Credits:** Voiceover: MD Tanveer Mahmood Shanin (Team Mindstormers) · Music/assets: [SLOT — same credit block as the 240s video]
 
 *English subtitles are burned in. This link is public and requires no login.* (30s video: https://youtu.be/8db2P04rIfI)
 
