@@ -16,7 +16,7 @@
 >
 > We call it the **flame in freefall**. It's the spacecraft's problem — and our namesake.
 >
-> We are **[SLOT: team name]** from **[SLOT: city]**, and we built **FlameScout** — a tool so no one has to guess what that flame will do next. I'm **[SLOT: name 1]** — **[specialty]**. **[SLOT: name 2]** — **[specialty]**. **[SLOT: name 3]** — **[specialty]**. **[SLOT: name 4]** — **[specialty]**. **[SLOT: adjust to EVERY member — required in both videos]**
+> We are **Team Mindstormers** from **[SLOT: city]**, and we built **FlameScout** — a tool so no one has to guess what that flame will do next. I'm **Omar Faruk Rakib** — **Team Lead & Full-Stack Developer**. **MD Tanveer Mahmood Shanin** — **Full-Stack Developer**. **Sawda Akter** — **Frontend Developer & Researcher**. **Joydev Datta** — **UI/UX & Editor**. **Antara Mazumder** — **Backend Developer**. **Md Junaeid Ali** — **AI Engineer**.
 
 **[ON SCREEN: FreefallFlame morph animation over the scenario → app splash. The logo flame and the words "flame in freefall" appear together — the brand and the physics concept become one image]**
 
@@ -66,7 +66,7 @@
 >
 > One day, an astronaut on a Mars transit will ask this exact question before packing a single material — and FlameScout will be the tool that answers, with every claim tied to a NASA experiment.
 >
-> From **[SLOT: city]**, we are **[SLOT: repeat team name]** — and every one of us thanks you: **[SLOT: quick full-team on-camera sign-off, names again]**
+> From **[SLOT: city]**, we are **Team Mindstormers** — and every one of us thanks you: **Omar Faruk Rakib · MD Tanveer Mahmood Shanin · Sawda Akter · Joydev Datta · Antara Mazumder · Md Junaeid Ali**
 >
 > **The next giant leap should not burn.**
 

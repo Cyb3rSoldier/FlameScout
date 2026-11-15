@@ -46,7 +46,9 @@ def parse_file(path: Path) -> list[dict]:
 
 
 def main() -> None:
-    input_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_INPUT
+    args = sys.argv[1:]
+    input_dir = Path(args[0]) if args else DEFAULT_INPUT
+    out_csv = Path(args[1]) if len(args) > 1 else OUT_CSV
     rows = []
     for path in sorted(input_dir.glob("*Mixture*.txt")):
         rows.extend(parse_file(path))
@@ -54,12 +56,12 @@ def main() -> None:
         print(f"No *Mixture*.txt files found in {input_dir}")
         return
     df = pd.DataFrame(rows)
-    OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(OUT_CSV, index=False)
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_csv, index=False)
     gases = ["O2", "CO2", "N2", "He", "Xe"]
     have = [g for g in gases if g in df.columns and (df[g] != "").astype(bool).any()]
     print(f"Parsed {len(df)} measurement(s) from {len(df['test_point'].unique())} "
-          f"test point(s) -> {OUT_CSV}")
+          f"test point(s) -> {out_csv}")
     print("diluents seen across files:", have)
 
 

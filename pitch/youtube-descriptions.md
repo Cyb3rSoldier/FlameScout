@@ -13,7 +13,7 @@ Paste-ready text for both uploads. Fill every `[SLOT]`, delete brackets you don'
 
 ---
 
-FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences Informatics (PSI) into clear, cited answers for spacecraft fire safety — and says "not enough data" when the evidence is thin. Built by team **[SLOT: team name]** at NASA Space Apps 2026, **[SLOT: event city]**.
+FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences Informatics (PSI) into clear, cited answers for spacecraft fire safety — and says "not enough data" when the evidence is thin. Built by **Team Mindstormers** at NASA Space Apps 2026, **[SLOT: event city]**.
 
 **What you'll see** — jump to a section:
 - 0:00 The flame in freefall — why space fire behaves differently
@@ -28,14 +28,14 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 
 **The honest-rules version:** representative values are flagged (≈), no safe/unsafe claims are made anywhere in this video or the project, and the prediction model refuses to answer outside the tested 276-run envelope.
 
-**Team:** [SLOT: every member's name, comma-separated — same list as on camera]
-**Challenge:** [SLOT: exact challenge title]
+**Team:** Omar Faruk Rakib (Team Lead & Full-Stack Developer) · MD Tanveer Mahmood Shanin (Full-Stack Developer) · Sawda Akter (Frontend Developer & Researcher) · Joydev Datta (UI/UX & Editor) · Antara Mazumder (Backend Developer) · Md Junaeid Ali (AI Engineer)
+**Challenge:** Flame in Freefall
 
 **Credits:** [SLOT: music — title/artist/license] · [SLOT: template or stock assets] · [SLOT: AI-generated content — describe what was generated] · [SLOT: anything else third-party]
 
 **NASA Space Apps** is a public international innovation program — learn more at spaceappschallenge.org. *(SLOT: add your Local Lead's preferred event line if any)*
 
-*[SLOT: hashtags — e.g. #SpaceApps #NASASpaceApps2026 #FlameScout]*
+*#SpaceApps #NASASpaceApps2026 #TeamMindstormers #FlameScout*
 
 ---
 
@@ -48,7 +48,7 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 
 ---
 
-FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **[SLOT: event city]**, by team **[SLOT: team name]**.
+FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **[SLOT: event city]**, by **Team Mindstormers**.
 
 **NASA data on screen:** NASA Physical Sciences Informatics (PSI) · FLEX Table IX, NASA/TP-2015-216046
 **Full pitch (4 minutes, with demo):** [SLOT: link to the 240-second video]

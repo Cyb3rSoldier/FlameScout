@@ -10,7 +10,7 @@
 
 > [Fast, confident, straight to camera]
 >
-> We're **[SLOT: team name]**, from **[SLOT: city]** — and this flame is in freefall.
+> We're **Team Mindstormers**, from **[SLOT: city]** — and this flame is in freefall.
 
 **[ON SCREEN: FreefallFlame morph animation; team logo lower-third]**
 
