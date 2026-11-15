@@ -21,6 +21,7 @@
 import { EXPERIMENTS } from "../data/experiments";
 import { deriveCoverage } from "../data/coverage";
 import { predictFlexLocal } from "../lib/flexModel";
+import { searchRag, RAG_INDEX, type RagHit } from "../lib/ragSearch";
 import { FIGURES, SOURCES } from "../data/sources";
 import type {
   ChatMessage,
@@ -200,59 +201,56 @@ interface AnswerParts {
   figureIds: string[];
 }
 
-function buildAskAnswer(question: string, exps: Experiment[]): AnswerParts {
-  const q = question.toLowerCase();
+function buildRagAnswer(question: string): AnswerParts & { hits: RagHit[] } {
+  const rag = searchRag(question, 5);
+
+  if (rag.refused) {
+    // House rule: refuse outside the tested envelope instead of inventing.
+    return {
+      answer:
+        `Not enough data in the indexed sources to answer this. The best matching chunk scored ${rag.topScore.toFixed(3)}, below the refusal threshold (${RAG_INDEX.minScore}), so no answer is synthesized. The refusal is the feature — a fire-safety tool that invents answers is worse than no tool.`,
+      strength: "Insufficient",
+      findings: [],
+      limitations:
+        `Deterministic retrieval only: TF-IDF over ${RAG_INDEX.chunks.length} indexed NASA-sourced chunks (${RAG_INDEX.nFeatures} features), no language model in the data path. The question likely falls outside what the indexed PSI evidence describes.`,
+      followUps: FOLLOWUP_BANK.ask,
+      insufficient: true,
+      figureIds: [],
+      hits: [], // refusal means no supporting evidence is surfaced
+    };
+  }
+
+  // Keep hit experiment ids that resolve in the catalog, deduped, order-preserving.
+  const seen = new Set<string>();
+  const expIds: string[] = [];
+  for (const h of rag.hits) {
+    if (!seen.has(h.meta.experimentId) && experimentById(h.meta.experimentId)) {
+      seen.add(h.meta.experimentId);
+      expIds.push(h.meta.experimentId);
+    }
+  }
+  const exps = expIds.map((id) => experimentById(id)!);
+  const strong = exps.filter((e) => e.evidenceStrength === "Strong").length;
+  const strength: EvidenceStrength = strong >= 2 ? "Strong" : strong === 1 ? "Moderate" : "Limited";
+
+  const findings = rag.hits.slice(0, 4).map((h) => {
+    const snippet = h.text.replace(/\s+/g, " ").slice(0, 240).trim();
+    return `${snippet} — [${h.id}, score ${h.score.toFixed(3)}]`;
+  });
+
   const figures: string[] = [];
-  for (const e of exps.slice(0, 3)) {
-    figures.push(...figuresForExperiment(e.id).map((f) => f.id));
-  }
-  const uniqueFigures = [...new Set(figures)].slice(0, 3);
-
-  // Thin / planned evidence check: matches whose records are planned produce an honest "not enough evidence" answer.
-  const strong = exps.filter((e) => e.evidenceStrength === "Strong");
-  const strength: EvidenceStrength = strong.length >= 2 ? "Strong" : strong.length === 1 ? "Moderate" : "Limited";
-
-  const findings = exps
-    .slice(0, 4)
-    .flatMap((e) => (e.keyFindings ?? [e.outcome ?? ""]).slice(0, 1).map((f) => `${f} (${e.id})`));
-
-  const atmos = exps.filter((e) => e.oxygen !== null);
-  const limitations =
-    atmos.length === 0
-      ? "None of the retrieved records describes a combustible atmosphere; they are smoke/dust or planned records. This answer cannot support a fire-risk inference."
-      : "No claim is drawn about any condition being safe or unsafe. Where oxygen/pressure are representative anchors (≈), treat run-level variation under the cited records as not yet quantified here.";
-
-  let answer: string;
-  if (q.includes("saffire") || q.includes("large-scale") || q.includes("fire growth") || q.includes("large fire")) {
-    answer =
-      "Large-fire evidence comes from the Saffire series — the only spacecraft-scale fire experiments conducted to date. Published summaries describe sustained fire growth over large fabric samples in an enclosed instrumented duct on an uncrewed Cygnus spacecraft, at cabin-like atmosphere, feeding fire-growth models for crewed volumes. Records are listed below with citations.";
-  } else if (q.includes("suppression") || q.includes("extinguish") || q.includes("extinct")) {
-    answer =
-      "Suppression-relevant evidence groups around extinction limits: the FLEX / FLEX-2 / CFI droplet line measured extinguishment boundaries across N₂, CO₂ and He dilution, while BASS-line tests observed in-flow suppression behavior on solid samples. Related findings are listed with citations below.";
-  } else if (q.includes("detect") || q.includes("smoke") || q.includes("alarm") || q.includes("particle")) {
-    answer =
-      "Detection evidence centers on the SAME / SAME-R line: published summaries report smoke particle sizes from overheated spacecraft materials, showing material-specific distributions that differ from Earth detector assumptions. DAFT / DAFT-2 add the ambient-dust background that alarms must discriminate against. Findings are listed below.";
-  } else if (q.includes("oxygen")) {
-    answer =
-      "Oxygen concentration is a controlling variable across the PSI catalog: most solid-material evidence sits near ≈21% O₂ cabin-like atmosphere, the droplet extinction line sweeps lower O₂ with diluents, and the highest-O₂ microgravity data come from the CFI-G spherical-burner line (up to ≈85% O₂ in the burner stream). Representative records are listed with citations below.";
-  } else if (q.includes("material") || q.includes("fabric") || q.includes("flammab")) {
-    answer =
-      "Material-flammability evidence is strongest in the solid-material line: BASS and BASS-II studied flame spread and suppression over cotton-fiberglass fabric and PMMA in cabin-like atmosphere, and the Saffire series scaled fabric fires to vehicle-scale ducts. Representative records are listed with citations below.";
-  } else if (q.includes("cool flame")) {
-    answer =
-      "Cool flames are a confirmed microgravity phenomenon in the PSI catalog: the FLEX line observed cool-flame burning after visible-flame extinction in methanol droplets, and the CFI / CFI-G line pursued them as a dedicated regime. Records are listed with citations below.";
-  } else {
-    answer =
-      "Based on keyword + field scoring over the NASA-sourced catalog, the following investigations rank highest for matching intent. No safe/unsafe claim is made — see the evidence-strength label and limit wording.";
-  }
+  for (const id of expIds.slice(0, 3)) figures.push(...figuresForExperiment(id).map((f) => f.id));
 
   return {
-    answer,
+    answer:
+      `Deterministic TF-IDF retrieval over ${RAG_INDEX.chunks.length} indexed NASA-sourced chunks matched this question (best score ${rag.topScore.toFixed(3)}). The matched evidence below is quoted from the indexed chunks and traced to PSI records — no language model touched this answer.`,
     strength,
     findings,
-    limitations,
+    limitations:
+      "Retrieval-only summary: sentences are quoted from indexed PSI-derived chunks, not paraphrased. No safe/unsafe claim is drawn; representative values are flagged (≈) at the source. Refusal threshold for weak matches: 0.10.",
     followUps: FOLLOWUP_BANK.ask,
-    figureIds: uniqueFigures,
+    figureIds: [...new Set(figures)].slice(0, 3),
+    hits: rag.hits,
   };
 }
 
@@ -411,6 +409,7 @@ export async function askQuestion(question: string, mode: QueryMode, filters: Fi
   }
   const detected = mode === "ask" ? classify(question) : mode;
   await delay(900);
+  const ragParts = detected === "ask" ? buildRagAnswer(question) : null;
   const parts: AnswerParts =
     detected === "gap"
       ? buildGapAnswer()
@@ -420,13 +419,31 @@ export async function askQuestion(question: string, mode: QueryMode, filters: Fi
           ? buildScenarioAnswer(question)
           : detected === "figure"
             ? buildFigureAnswer(matchExperiments(question, filters))
-            : buildAskAnswer(question, matchExperiments(question, filters));
+            : ragParts!;
 
-  const cited = matchExperiments(question, filters, 3);
+  const cited: Experiment[] = ragParts
+    ? ragParts.hits
+        .map((h) => experimentById(h.meta.experimentId))
+        .filter((x, i, arr): x is Experiment => Boolean(x) && arr.indexOf(x) === i)
+        .slice(0, 3)
+    : matchExperiments(question, filters, 3);
   const citations: Citation[] = cited.map((e, i) => {
     const s = SOURCES.find((x) => x.id === e.sourceId);
     return { n: i + 1, sourceId: e.sourceId, page: s?.page ?? "", label: s?.title ?? e.sourceId };
   });
+  // ask mode may cite sources whose experiment records aren't in the app
+  // catalog — keep those citations from the chunks themselves.
+  if (ragParts && cited.length === 0) {
+    const seen = new Set<string>();
+    let n = 1;
+    for (const h of ragParts.hits) {
+      if (seen.has(h.meta.sourceId)) continue;
+      seen.add(h.meta.sourceId);
+      const s = SOURCES.find((x) => x.id === h.meta.sourceId);
+      citations.push({ n: n++, sourceId: h.meta.sourceId, page: s?.page ?? "", label: s?.title ?? h.meta.sourceId });
+      if (n > 3) break;
+    }
+  }
   const insufficient = Boolean(parts.insufficient) || (detected === "ask" && cited.every((e) => e.evidenceStrength === "Limited") && cited.length > 0);
   const traceId = `trace-${Date.now()}`;
   const message: ChatMessage = {
@@ -450,15 +467,22 @@ export async function askQuestion(question: string, mode: QueryMode, filters: Fi
   const trace: EvidenceTrace = {
     id: traceId,
     question,
-    classification: `${detected} → ${detected === "ask" ? "field-weighted catalog retrieval" : detected === "compare" ? "attribute diff" : detected === "figure" ? "figure retrieval" : detected === "scenario" ? "condition-nearest retrieval" : "coverage analysis"}`,
+    classification: ragParts
+      ? `ask → deterministic TF-IDF retrieval (rag index: ${RAG_INDEX.chunks.length} chunks, ${RAG_INDEX.nFeatures} features)`
+      : `${detected} → ${detected === "compare" ? "attribute diff" : detected === "figure" ? "figure retrieval" : detected === "scenario" ? "condition-nearest retrieval" : "coverage analysis"}`,
     steps: [
       { title: "Question", detail: question },
       { title: "Query classification", detail: `Router selected the "${detected}" path.` },
-      {
-        title: "Retrieval",
-        detail: `Scored ${EXPERIMENTS.length} NASA-sourced records by keyword hit (title ×3, keywords ×2, body ×1) with active filters ${JSON.stringify(filters)}.`,
-      },
-      { title: "Retrieved evidence", detail: cited.map((e) => e.id).join(", ") || "none" },
+      ragParts
+        ? {
+            title: "Retrieval",
+            detail: `TF-IDF cosine similarity over ${RAG_INDEX.chunks.length} indexed chunks (sublinear tf, 1–2-grams, English stop-words). Refusal threshold ${RAG_INDEX.minScore}; best score ${ragParts && ragParts.hits.length >= 0 ? (ragParts.hits[0]?.score ?? 0).toFixed(3) : "0.000"}${ragParts.hits.length === 0 || (ragParts.hits[0]?.score ?? 1) < RAG_INDEX.minScore ? " → refused" : ""}.`,
+          }
+        : {
+            title: "Retrieval",
+            detail: `Scored ${EXPERIMENTS.length} NASA-sourced records by keyword hit (title ×3, keywords ×2, body ×1) with active filters ${JSON.stringify(filters)}.`,
+          },
+      { title: "Retrieved evidence", detail: (ragParts ? ragParts.hits.map((h) => h.id) : cited.map((e) => e.id)).join(", ") || "none — refused below threshold" },
       {
         title: "Verification",
         detail: `${citations.length} claim source(s) resolved against PSI records; wording restricted to "published summaries describe…".`,
