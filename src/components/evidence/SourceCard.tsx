@@ -1,4 +1,4 @@
-import { BookOpen, FileImage, FlaskConical } from "lucide-react";
+import { BookOpen, ExternalLink, FileImage, FlaskConical } from "lucide-react";
 import { sourceById } from "../../services/api";
 import { Badge } from "../ui";
 
@@ -22,6 +22,18 @@ export default function SourceCard({ sourceId, citation, compact = false }: { so
               <span>{s.page}</span>
               <span aria-label={`relevance ${Math.round(s.relevance * 100)} percent`}>· {Math.round(s.relevance * 100)}% match</span>
             </p>
+            {s.url && (
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1.5 inline-flex items-center gap-1 rounded-md border border-teal-600/30 px-2 py-0.5 text-[11px] font-medium text-teal-700 transition-colors hover:bg-teal-600/10 dark:text-teal-300 dark:border-teal-400/30 dark:hover:bg-teal-400/10"
+                aria-label={`Open ${s.title} at NASA (external site)`}
+              >
+                <ExternalLink size={11} aria-hidden />
+                Open at NASA ↗
+              </a>
+            )}
           </div>
         </div>
       </div>

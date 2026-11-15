@@ -15,6 +15,7 @@ export const SOURCES: Source[] = [
     page: "psi.nasa.gov",
     relevance: 0.97,
     citation: 11,
+    url: "https://psi.nasa.gov",
   },
   {
     id: "SRC-BASS",
@@ -23,6 +24,7 @@ export const SOURCES: Source[] = [
     page: "PSI: BASS, BASS-II",
     relevance: 0.95,
     citation: 1,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
   },
   {
     id: "SRC-FLEX",
@@ -31,6 +33,7 @@ export const SOURCES: Source[] = [
     page: "ntrs.nasa.gov (TP-2015-216046)",
     relevance: 0.97,
     citation: 3,
+    url: "https://ntrs.nasa.gov/citations/20150023456",
   },
   {
     id: "SRC-FLEX2",
@@ -39,6 +42,7 @@ export const SOURCES: Source[] = [
     page: "PSI: FLEX-2",
     relevance: 0.93,
     citation: 4,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-68",
   },
   {
     id: "SRC-CFI",
@@ -47,6 +51,7 @@ export const SOURCES: Source[] = [
     page: "PSI: CFI, CFI-G",
     relevance: 0.9,
     citation: 7,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-159",
   },
   {
     id: "SRC-ACME",
@@ -55,6 +60,7 @@ export const SOURCES: Source[] = [
     page: "PSI: ACME project",
     relevance: 0.88,
     citation: 5,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-10",
   },
   {
     id: "SRC-SAME",
@@ -63,6 +69,7 @@ export const SOURCES: Source[] = [
     page: "PSI: SAME, SAME-R",
     relevance: 0.9,
     citation: 6,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-101",
   },
   {
     id: "SRC-SPICE",
@@ -71,6 +78,7 @@ export const SOURCES: Source[] = [
     page: "PSI: SPICE, SLICE",
     relevance: 0.82,
     citation: 9,
+    url: "https://psi.nasa.gov/physci/repo/search?q=SPICE&data_source=psi&data_type=investigation",
   },
   {
     id: "SRC-DAFT",
@@ -79,6 +87,7 @@ export const SOURCES: Source[] = [
     page: "PSI: DAFT, DAFT-2",
     relevance: 0.7,
     citation: 10,
+    url: "https://psi.nasa.gov/physci/repo/search?q=DAFT&data_source=psi&data_type=investigation",
   },
   {
     id: "SRC-SAFFIRE",
@@ -87,6 +96,7 @@ export const SOURCES: Source[] = [
     page: "ntrs.nasa.gov via PSI",
     relevance: 0.96,
     citation: 2,
+    url: "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
   },
 ];
 

@@ -112,6 +112,8 @@ export interface Source {
   relevance: number; // 0..1
   citation: number;
   demo?: boolean;
+  /** Real NASA URL (PSI investigation record / NTRS citation) — opens externally. */
+  url?: string;
 }
 
 export interface Citation {
