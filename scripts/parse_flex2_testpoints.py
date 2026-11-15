@@ -1,16 +1,18 @@
-# Parse FLEX-2 (PSI-68) test point setting files (D#D#.txt) into one CSV.
+# Parse FLEX-2 (PSI-68) MDCA test point settings into one CSV.
 #
-# Each file is a key:<TAB>value listing of a droplet test point's run
-# parameters: igniter timing/wattage/position, "Burn to Completion", and
-# AS/CC (astronaut setup) timestamps. The test point id comes from the
-# "Test Point:" line (fallback: filename).
+# PSI-68 ships these as CSV files (A109D03_MDCA_Testpoint_Settings.txt):
+# quoted header of ~62-77 columns, then one data row per executed test
+# point/run. Key columns (base names, suffixes vary by file):
+#   TEST_POINT_DESIGNATOR, PIP TimeStamp, MAIN_COMPUTER_TIME(GMT),
+#   TP_PARAMETER_IGNITER_ON_TIME, TP_PARAMETER_IGNITER_WATTAGE,
+#   TP_PARAMETER_BURN_TO_COMPLETION_TIME, igniter/dispenser/needle positions.
 #
-# Output: datasets/flex2_testpoints.csv (one row per test point)
+# Output: datasets/flex2_testpoints.csv (one row per executed run)
 #
 # Deterministic parsing only. Usage:
 #   python scripts/parse_flex2_testpoints.py [input_dir]
 # Default input: D:\nasa-space-apps\psi-68
-import re
+import csv
 import sys
 from pathlib import Path
 
@@ -19,47 +21,87 @@ import pandas as pd
 DEFAULT_INPUT = Path(r"D:\nasa-space-apps\psi-68")
 HERE = Path(__file__).resolve().parent.parent
 OUT_CSV = HERE / "datasets" / "flex2_testpoints.csv"
-POINT_RE = re.compile(r"([A-Z]\d{3}D\d{2})", re.IGNORECASE)
-KV_RE = re.compile(r"^([A-Za-z0-9 /()\-]+?)\s{2,}(.*)$")
-KEYS = ["Igniter On Time (milliseconds)", "Igniter Wattage",
-        "Igniter 1 Position", "Igniter 2 Position",
-        "Burn to Completion (milliseconds)",
-        "AS Burn to Completion/Igniter On", "AS Igniter Off/Retract Start",
-        "CC Setup Started"]
+
+# output column -> source header base name (matched by prefix before "(")
+WANT = {
+    "test_point": "TEST_POINT_DESIGNATOR",
+    "pip_timestamp": "PIP TimeStamp",
+    "main_computer_time_gmt": "MAIN_COMPUTER_TIME",
+    "igniter_1_profile": "IGNITER_1_PROFILE",
+    "igniter_2_profile": "IGNITER_2_PROFILE",
+    "igniter_on_time_ms": "TP_PARAMETER_IGNITER_ON_TIME",
+    "igniter_wattage_w": "TP_PARAMETER_IGNITER_WATTAGE",
+    "burn_to_completion_ms": "TP_PARAMETER_BURN_TO_COMPLETION_TIME",
+    "igniter_ignition_position_1": "TP_PARAMETER_IGNITER_IGNITION_POSITION_1",
+    "igniter_ignition_position_2": "TP_PARAMETER_IGNITER_IGNITION_POSITION_2",
+    "igniter_retract_position_1": "TP_PARAMETER_IGNITER_RETRACT_POSITION_1",
+    "igniter_retract_position_2": "TP_PARAMETER_IGNITER_RETRACT_POSITION_2",
+    "needle_dispense_position_1": "TP_PARAMETER_NEEDLE_DISPENSE_POSITION_1",
+    "needle_dispense_position_2": "TP_PARAMETER_NEEDLE_DISPENSE_POSITION_2",
+    "dispenser_velocity_1": "TP_PARAMETER_DISPENSER_VELOCITY_1",
+    "dispenser_velocity_2": "TP_PARAMETER_DISPENSER_VELOCITY_2",
+    "dispenser_acceleration_1": "TP_PARAMETER_DISPENSER_ACCELERATION_1",
+    "dispenser_acceleration_2": "TP_PARAMETER_DISPENSER_ACCELERATION_2",
+    "fiber_rotate_position": "TP_PARAMETER_FIBER_ROTATE_POSITION",
+    "camera_zoom": "COLOR_CAMERA_PARAMETER_CAMERA_ZOOM",
+}
 
 
-def parse_file(path: Path) -> dict | None:
+def base(col: str) -> str:
+    return col.split("(")[0].strip()
+
+
+def parse_file(path: Path) -> list[dict]:
     text = path.read_text(encoding="utf-8", errors="replace")
-    pm = POINT_RE.search(path.name)
-    if not pm:
-        return None
-    point = pm.group(1).upper()
-    row = {"test_point": point, "file": path.name}
-    for ln in text.splitlines():
-        m = KV_RE.match(ln.strip())
-        if not m:
-            continue
-        key, val = m.group(1).strip(), m.group(2).strip()
-        if key in KEYS and key not in row:
-            row[key] = val
-    return row if len(row) > 2 else None
+    reader = csv.reader(text.splitlines())
+    rows = [r for r in reader if any(cell.strip() for cell in r)]
+    if len(rows) < 2:
+        return []
+    header = rows[0]
+    # map each wanted output column to a header index
+    idx: dict[str, int] = {}
+    for out_col, want in WANT.items():
+        for i, col in enumerate(header):
+            if base(col) == want and out_col not in idx:
+                idx[out_col] = i
+    out = []
+    for r in rows[1:]:
+        row = {c: (r[i].strip() if i < len(r) and c in idx else "") for c, i in idx.items()}
+        tp = row.get("test_point", "")
+        if not tp:
+            # fallback: designator pattern from filename, e.g. A109D03
+            import re
+            m = re.search(r"([A-Z]\d{3}[RD]\d{2})", path.name, re.IGNORECASE)
+            tp = m.group(1).upper() if m else path.stem
+        row["test_point"] = tp.upper()
+        row["file"] = path.name
+        out.append(row)
+    return out
 
 
 def main() -> None:
     input_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_INPUT
-    rows = []
-    for path in sorted(input_dir.glob("D*D*.txt")):
-        r = parse_file(path)
-        if r:
+    rows: list[dict] = []
+    files = sorted(input_dir.rglob("*_MDCA_Testpoint_Settings.txt"))
+    seen: set[tuple[str, str]] = set()  # (test_point, pip_timestamp)
+    for path in files:
+        for r in parse_file(path):
+            key = (r["test_point"], r.get("pip_timestamp", ""))
+            if key in seen:
+                continue
+            seen.add(key)
             rows.append(r)
     if not rows:
-        print(f"No D*D*.txt test point files found in {input_dir}")
+        print(f"No MDCA test point setting files found in {input_dir}")
         return
     df = pd.DataFrame(rows)
+    cols = ["test_point", "file"] + [c for c in df.columns if c not in ("test_point", "file")]
+    df = df[cols]
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUT_CSV, index=False)
-    burned = df["Burn to Completion (milliseconds)"].notna().sum()
-    print(f"Parsed {len(df)} test point(s) ({burned} with burn-to-completion) "
+    burned = df["burn_to_completion_ms"].notna().sum()
+    print(f"Parsed {len(df)} run row(s) from {len(files)} files "
+          f"({df['test_point'].nunique()} unique test points, {burned} with burn-to-completion) "
           f"-> {OUT_CSV}")
 
 
