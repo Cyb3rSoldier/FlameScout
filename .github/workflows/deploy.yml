@@ -1,0 +1,48 @@
+# Deploy FlameScout to GitHub Pages.
+# Repo: Cyb3rSoldier/FlameScout -> https://cyb3rsoldier.github.io/FlameScout/
+# Requires: repo Settings -> Pages -> Build and deployment source = "GitHub Actions".
+#
+# SPA note: GitHub Pages 404s on deep links (/rank, /predict, ...). We copy
+# index.html to 404.html so the router picks the path up client-side.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: SPA fallback for deep links
+        run: cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
