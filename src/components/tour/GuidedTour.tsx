@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight, Compass, MapPin, X } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { cn } from "../../lib/utils";
 
 const STORAGE_KEY = "flamescout-tour-v4";
+const DONE_KEY = "flamescout-tour-done-v1";
 const CARD_WIDTH = 330;
 
 /**
@@ -192,10 +193,49 @@ export default function GuidedTour() {
     return () => window.removeEventListener("keydown", onKey);
   }, [tourOpen, setTourOpen]);
 
+  // Floating "Take the tour" pill: visible on every page except /assistant
+  // (where the auto-tour already opens and the composer footnote would be
+  // covered) — until the tour is completed or skipped.
+  const [pillHidden, setPillHidden] = useState(true);
+  const location = useLocation();
+  useEffect(() => {
+    if (tourOpen) return;
+    if (location.pathname === "/assistant") { setPillHidden(true); return; }
+    let done = true;
+    try { done = localStorage.getItem(DONE_KEY) === "1"; } catch { /* private mode — hide pill */ }
+    setPillHidden(done);
+  }, [tourOpen, location.pathname]);
+
+  if (!tourOpen && !pillHidden) {
+    // Floating, always-reachable entry point (judges land on any page, not
+    // just /assistant where the auto-tour opens).
+    return (
+      <div
+        className="fixed bottom-5 left-5 z-[65] flex items-center gap-2 rounded-full border border-teal-600/40 bg-white/95 py-2 pl-3.5 pr-2 shadow-xl backdrop-blur dark:bg-slate-900/95"
+        role="status"
+      >
+        <Compass size={15} className="text-teal-700 dark:text-teal-300" aria-hidden />
+        <button
+          onClick={() => { setStep(0); setTourOpen(true); }}
+          className="text-[13px] font-semibold text-teal-800 hover:underline dark:text-teal-200"
+        >
+          Take the tour — 7 quick steps
+        </button>
+        <button
+          onClick={() => setPillHidden(true)}
+          className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
+          aria-label="Dismiss tour hint"
+        >
+          <X size={13} />
+        </button>
+      </div>
+    );
+  }
+
   if (!tourOpen) return null;
 
   const close = () => {
-    try { localStorage.setItem(STORAGE_KEY, "1"); } catch { /* private mode — ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, "1"); localStorage.setItem(DONE_KEY, "1"); } catch { /* private mode — ignore */ }
     setTourOpen(false);
     setStep(0);
   };
