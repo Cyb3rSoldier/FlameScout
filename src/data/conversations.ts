@@ -6,7 +6,7 @@ export const CONVERSATIONS: Conversation[] = [
   { id: "c3", title: "Compare BASS and BASS-II variables", preview: "Same hardware · shared duct · two eras", updatedAt: "3h ago" },
   { id: "c4", title: "What conditions have not been tested?", preview: "Coverage gaps · Moon-regime on top", updatedAt: "Yesterday" },
   { id: "c5", title: "How do smoke particle sizes differ by material?", preview: "SAME/SAME-R · detection pillar", updatedAt: "Yesterday" },
-  { id: "c6", title: "Cool flame extinction in methanol droplets", preview: "FLEX Table IX · 280 runs cited", updatedAt: "2d ago" },
+  { id: "c6", title: "Cool flame extinction in methanol droplets", preview: "FLEX Table IX · 276 runs cited", updatedAt: "2d ago" },
   { id: "c7", title: "What does E-FIELD say about mimicking partial gravity?", preview: "Electric-field analog · physics pillar", updatedAt: "3d ago" },
   { id: "c8", title: "Mission fit for a pressurized rover", preview: "Ranking view", updatedAt: "4d ago" },
 ];

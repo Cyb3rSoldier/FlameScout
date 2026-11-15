@@ -44,7 +44,7 @@
 >
 > **Mission Fit** ranks every investigation against your crewed environment — spacecraft, lunar base, pressurized rover, spacesuit — with transparent weights you can read, no black box.
 >
-> **Predict** estimates how a burning fuel droplet behaves — built from **280 real FLEX tests, NASA Technical Paper 2015-216046, Table IX** — and it refuses to answer outside the tested range. Honest by design.
+> **Predict** estimates how a burning fuel droplet behaves — built from **276 real FLEX tests, NASA Technical Paper 2015-216046, Table IX** — and it refuses to answer outside the tested range. Honest by design.
 >
 > The **Experiment Lab** lets you grab a slider and raise oxygen or drop pressure, and watch which corners of the map have data and which don't.
 >

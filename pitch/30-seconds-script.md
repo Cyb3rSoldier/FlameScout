@@ -30,7 +30,7 @@
 
 > [SCREEN RECORDING — this is the half judges remember. No narration slippage: the words land as the actions land.]
 >
-> **FlameScout, live.** It ranks NASA PSI experiments for a lunar habitat, predicts from **280 real FLEX tests** — or says **"not enough data."**
+> **FlameScout, live.** It ranks NASA PSI experiments for a lunar habitat, predicts from **276 real FLEX tests** — or says **"not enough data."**
 
 **[ON SCREEN: screen recording — Mission Fit ranking scroll (~3 s) → Predict result row (~3 s) → "Not enough data" badge (~3 s); dataset caption held ≥2 s: `NASA PSI · FLEX Table IX · NASA/TP-2015-216046`]**
 

@@ -27,7 +27,7 @@ Set `VITE_API_BASE_URL=http://localhost:8000` (see `.env.example`) and implement
 - **Mission Fit (`/rank`)** — transparent heuristic ranking (atmosphere overlap 0.35 · safety pillar 0.30 · materials directness 0.20 · evidence depth 0.15) of investigations per crewed environment; planned records listed as roadmap lines, unranked.
 - **Coverage Map (`/coverage`)** — pressure × oxygen heatmap derived from the catalog at call time, with ranked knowledge gaps (top gap: Moon-regime solid flammability at ≥30% O₂ / ≤10.2 psi).
 - **Evidence Assistant (`/assistant`)** — field-weighted keyword retrieval (title ×3, keywords ×2, body ×1) + filter application, five query modes, citations, evidence traces, honest "insufficient evidence" answers.
-- **Prediction (`/predict`)** — exploratory kNN estimator over the 280 real FLEX Table IX tests; refuses to extrapolate outside the tested envelope.
+- **Prediction (`/predict`)** — exploratory kNN estimator over the 276 real FLEX Table IX tests; refuses to extrapolate outside the tested envelope.
 - **Living flame UI** — the flame illustration and the whole interface react to the conditions you set and to how strong the evidence is (see below).
 
 ## Flame visuals

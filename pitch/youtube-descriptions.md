@@ -26,7 +26,7 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 - FLEX run-level data: Table IX, NASA Technical Publication NASA/TP-2015-216046
 - Related NASA investigations summarized in the catalog: BASS / BASS-II, Saffire I–III, FLEX / FLEX-2, SAME / SAME-R, DAFT / DAFT-2, SPICE, Flame Design, CFI, E-FIELD
 
-**The honest-rules version:** representative values are flagged (≈), no safe/unsafe claims are made anywhere in this video or the project, and the prediction model refuses to answer outside the tested 280-run envelope.
+**The honest-rules version:** representative values are flagged (≈), no safe/unsafe claims are made anywhere in this video or the project, and the prediction model refuses to answer outside the tested 276-run envelope.
 
 **Team:** [SLOT: every member's name, comma-separated — same list as on camera]
 **Challenge:** [SLOT: exact challenge title]
@@ -48,7 +48,7 @@ FlameScout is an evidence-grounded dashboard that turns NASA's Physical Sciences
 
 ---
 
-FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 280 real FLEX tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **[SLOT: event city]**, by team **[SLOT: team name]**.
+FlameScout in thirty seconds: it ranks NASA PSI combustion investigations for crewed environments, predicts flammability behaviour from 276 real FLEX droplet tests (NASA/TP-2015-216046, Table IX) — and refuses to answer where no data exists. Built at NASA Space Apps 2026, **[SLOT: event city]**, by team **[SLOT: team name]**.
 
 **NASA data on screen:** NASA Physical Sciences Informatics (PSI) · FLEX Table IX, NASA/TP-2015-216046
 **Full pitch (4 minutes, with demo):** [SLOT: link to the 240-second video]
